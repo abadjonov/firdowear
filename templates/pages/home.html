@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% load i18n %}
+{% block content %}
+<section class="rounded-2xl bg-gradient-to-br from-sky-600 to-indigo-700 text-white p-6 sm:p-10">
+  <p class="text-sky-100 text-sm font-medium">{% trans "O'g'il bolalar uchun" %} · 0–18</p>
+  <h1 class="text-3xl sm:text-4xl font-black mt-1 leading-tight">{% trans "Kiyim va poyabzal — bog'chadan bitiruvgacha" %}</h1>
+  <p class="mt-2 text-sky-100 max-w-lg">{% trans "Turli brendlar, haqiqiy qoldiq. Saytda tanlang, Telegramda buyurtma bering yoki do'konga keling." %}</p>
+  <div class="mt-5 flex flex-wrap gap-2">
+    {% for a in menu_age_groups %}<a href="{{ a.get_absolute_url }}" class="bg-white/15 hover:bg-white/25 backdrop-blur px-4 py-2 rounded-full text-sm font-medium">{{ a.name }}</a>{% endfor %}
+  </div>
+</section>
+
+<section class="mt-6 grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2">
+  {% for c in top_categories %}
+    <a href="{{ c.get_absolute_url }}" class="bg-white border border-stone-200 rounded-xl p-3 text-center text-xs sm:text-sm font-medium hover:border-stone-900">
+      {% if c.image %}<img src="{{ c.image.url }}" alt="{{ c.name }}" loading="lazy" class="w-12 h-12 mx-auto object-cover rounded-full mb-1">{% endif %}
+      {{ c.name }}
+    </a>
+  {% endfor %}
+</section>
+
+{% if featured %}<section class="mt-8"><div class="flex justify-between items-baseline mb-3"><h2 class="text-xl font-bold">{% trans "Tanlangan" %}</h2></div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">{% for p in featured %}{% include "products/_card.html" %}{% endfor %}</div></section>{% endif %}
+
+{% if new %}<section class="mt-8"><div class="flex justify-between items-baseline mb-3"><h2 class="text-xl font-bold">{% trans "Yangi kelganlar" %}</h2><a href="{% url 'products:catalog' %}?new=1" class="text-sm text-sky-600">{% trans "Barchasi" %} →</a></div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">{% for p in new %}{% include "products/_card.html" %}{% endfor %}</div></section>{% endif %}
+
+{% if sale %}<section class="mt-8"><div class="flex justify-between items-baseline mb-3"><h2 class="text-xl font-bold text-red-600">{% trans "Chegirmalar" %}</h2><a href="{% url 'products:catalog' %}?sale=1" class="text-sm text-sky-600">{% trans "Barchasi" %} →</a></div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">{% for p in sale %}{% include "products/_card.html" %}{% endfor %}</div></section>{% endif %}
+
+{% if not featured and not new and not sale %}
+<div class="mt-8 bg-white rounded-xl border border-dashed border-stone-300 p-10 text-center text-stone-500">{% trans "Mahsulotlar hali qo'shilmagan. Admin panel orqali qo'shing." %}</div>
+{% endif %}
+
+<section class="mt-10 bg-white rounded-2xl border border-stone-200 p-6 grid sm:grid-cols-2 gap-4 items-center">
+  <div>
+    <h2 class="text-xl font-bold">{% trans "Do'konimizga keling" %}</h2>
+    <p class="mt-1 text-stone-600">{{ shop.address }}</p>
+    <p class="text-stone-500 text-sm">{% trans "Ish vaqti" %}: {{ shop.hours }}</p>
+    <a href="{% url 'pages:contact' %}" class="inline-block mt-3 text-sky-600 font-medium">{% trans "Manzil va xarita" %} →</a>
+  </div>
+  <a href="tel:{{ shop.phone|cut:' ' }}" class="text-center bg-stone-900 text-white rounded-xl py-3 font-semibold">{{ shop.phone }}</a>
+</section>
+{% endblock %}

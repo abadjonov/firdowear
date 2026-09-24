@@ -1,0 +1,311 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Alohida narx"
+msgstr "Отдельная цена"
+
+msgid "Arzon → qimmat"
+msgstr "Дешевле → дороже"
+
+msgid "Asosiy"
+msgstr "Основное"
+
+msgid "Bahor"
+msgstr "Весна"
+
+msgid "Barcha fasl"
+msgstr "Все сезоны"
+
+msgid "Barchasi"
+msgstr "Все"
+
+msgid "Bo'sh bo'lsa mahsulot narxi"
+msgstr "Если пусто — цена товара"
+
+msgid "Bo'y (sm) dan"
+msgstr "Рост (см) от"
+
+msgid "Bo'y (sm) gacha"
+msgstr "Рост (см) до"
+
+msgid "Bosh sahifa"
+msgstr "Главная"
+
+msgid "Bosh sahifada"
+msgstr "На главной"
+
+msgid "Brend"
+msgstr "Бренд"
+
+msgid "Brendlar"
+msgstr "Бренды"
+
+msgid "Chegirma narxi"
+msgstr "Цена со скидкой"
+
+msgid "Chegirmada"
+msgstr "Со скидкой"
+
+msgid "Chegirmalar"
+msgstr "Скидки"
+
+msgid "Do'kon"
+msgstr "Магазин"
+
+msgid "Do'konimizga keling"
+msgstr "Приходите в наш магазин"
+
+msgid "Faol"
+msgstr "Активен"
+
+msgid "Faqat"
+msgstr "Осталось"
+
+msgid "Faqat eng pastki (2-daraja) kategoriya"
+msgstr "Только нижняя (2-й уровень) категория"
+
+msgid "Faqat mavjud"
+msgstr "Только в наличии"
+
+msgid "Fasl"
+msgstr "Сезон"
+
+msgid "Filtr"
+msgstr "Фильтр"
+
+msgid "Hech narsa topilmadi. Filtrni o'zgartirib ko'ring."
+msgstr "Ничего не найдено. Попробуйте изменить фильтр."
+
+msgid "Hozircha omborda yo'q."
+msgstr "Пока нет в наличии."
+
+msgid "Ijtimoiy tarmoqlar"
+msgstr "Соцсети"
+
+msgid "Ish vaqti"
+msgstr "Время работы"
+
+msgid "Katalog"
+msgstr "Каталог"
+
+msgid "Kategoriya"
+msgstr "Категория"
+
+msgid "Kategoriyalar"
+msgstr "Категории"
+
+msgid "Kiyim va poyabzal — bog'chadan bitiruvgacha"
+msgstr "Одежда и обувь — от садика до выпускного"
+
+msgid "Ko'rsatiladigan nom"
+msgstr "Отображаемое имя"
+
+msgid "Kod"
+msgstr "Код"
+
+msgid "Kuz"
+msgstr "Осень"
+
+msgid "Logo"
+msgstr "Логотип"
+
+msgid "Mahsulot"
+msgstr "Товар"
+
+msgid "Mahsulotlar"
+msgstr "Товары"
+
+msgid "Mahsulotlar hali qo'shilmagan. Admin panel orqali qo'shing."
+msgstr "Товары ещё не добавлены. Добавьте через админ-панель."
+
+msgid "Mamlakat"
+msgstr "Страна"
+
+msgid "Manzil"
+msgstr "Адрес"
+
+msgid "Manzil va aloqa"
+msgstr "Адрес и контакты"
+
+msgid "Manzil va xarita"
+msgstr "Адрес и карта"
+
+msgid "Material"
+msgstr "Материал"
+
+msgid "Mavjud"
+msgstr "В наличии"
+
+msgid "Narx (so'm)"
+msgstr "Цена (сум)"
+
+msgid "Narx, so'm"
+msgstr "Цена, сум"
+
+msgid "Nomi"
+msgstr "Название"
+
+msgid "O'g'il bolalar kiyimi 0–18 yosh. Toshkent."
+msgstr "Одежда для мальчиков 0–18 лет. Ташкент."
+
+msgid "O'g'il bolalar kiyimi va poyabzali, 0–18 yosh."
+msgstr "Одежда и обувь для мальчиков 0–18 лет."
+
+msgid "O'g'il bolalar uchun"
+msgstr "Для мальчиков"
+
+msgid "O'lcham"
+msgstr "Размер"
+
+msgid "O'lcham tizimi"
+msgstr "Система размеров"
+
+msgid "O'lcham tizimlari"
+msgstr "Системы размеров"
+
+msgid "O'lchamlar"
+msgstr "Размеры"
+
+msgid "O'xshash mahsulotlar"
+msgstr "Похожие товары"
+
+msgid "Ota kategoriya"
+msgstr "Родительская категория"
+
+msgid "Parvarish"
+msgstr "Уход"
+
+msgid "Qidir"
+msgstr "Найти"
+
+msgid "Qidirish"
+msgstr "Поиск"
+
+msgid "Qidirish: jinsi 134, kurtka..."
+msgstr "Поиск: джинсы 134, куртка..."
+
+msgid "Qimmat → arzon"
+msgstr "Дороже → дешевле"
+
+msgid "Qish"
+msgstr "Зима"
+
+msgid "Qo'llash"
+msgstr "Применить"
+
+msgid "Qo'ng'iroq"
+msgstr "Позвонить"
+
+msgid "Qoldiq"
+msgstr "Остаток"
+
+msgid "Rang"
+msgstr "Цвет"
+
+msgid "Ranglar"
+msgstr "Цвета"
+
+msgid "Rasm"
+msgstr "Фото"
+
+msgid "Rasm yo'q"
+msgstr "Нет фото"
+
+msgid "Rasmlar"
+msgstr "Фотографии"
+
+msgid "Salom! Buyurtma bermoqchiman"
+msgstr "Здравствуйте! Хочу заказать"
+
+msgid "Standart o'lcham tizimi"
+msgstr "Система размеров по умолчанию"
+
+msgid "Tanlangan"
+msgstr "Рекомендуем"
+
+msgid "Tartib"
+msgstr "Порядок"
+
+msgid "Tavsif"
+msgstr "Описание"
+
+msgid "Telefon"
+msgstr "Телефон"
+
+msgid "Telegram orqali buyurtma"
+msgstr "Заказать через Telegram"
+
+msgid "Tugagan"
+msgstr "Нет в наличии"
+
+msgid "Turli brendlar, haqiqiy qoldiq. Saytda tanlang, Telegramda buyurtma bering yoki do'konga keling."
+msgstr "Разные бренды, реальные остатки. Выбирайте на сайте, заказывайте в Telegram или приходите в магазин."
+
+msgid "Variant"
+msgstr "Вариант"
+
+msgid "Variantlar"
+msgstr "Варианты"
+
+msgid "Xarita: .env faylida SHOP_MAP_EMBED ga Yandex/Google iframe kodini qo'ying."
+msgstr "Карта: добавьте iframe Яндекс/Google в SHOP_MAP_EMBED в файле .env."
+
+msgid "Yangi"
+msgstr "Новинка"
+
+msgid "Yangi kelganlar"
+msgstr "Новинки"
+
+msgid "Yangi mahsulot qo'shganda avtomatik tanlanadi"
+msgstr "Выбирается автоматически при добавлении товара"
+
+msgid "Yoki do'konga keling"
+msgstr "Или приходите в магазин"
+
+msgid "Yosh"
+msgstr "Возраст"
+
+msgid "Yosh (oy) dan"
+msgstr "Возраст (мес) от"
+
+msgid "Yosh (oy) gacha"
+msgstr "Возраст (мес) до"
+
+msgid "Yosh guruhi"
+msgstr "Возрастная группа"
+
+msgid "Yosh guruhlari"
+msgstr "Возрастные группы"
+
+msgid "Yoz"
+msgstr "Лето"
+
+msgid "dan"
+msgstr "от"
+
+msgid "gacha"
+msgstr "до"
+
+msgid "o'lcham"
+msgstr "размер"
+
+msgid "rang"
+msgstr "цвет"
+
+msgid "so'm"
+msgstr "сум"
+
+msgid "ta mahsulot"
+msgstr "товаров"
+
+msgid "ta qoldi"
+msgstr "шт."
+
+msgid "O'zbekcha"
+msgstr "Узбекский"
+
+msgid "Русский"
+msgstr "Русский"
