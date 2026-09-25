@@ -1,0 +1,22 @@
+{% load i18n humanize %}
+<a href="{{ p.get_absolute_url }}" class="group block bg-white rounded-xl border border-stone-200 overflow-hidden hover:shadow-md transition">
+  <div class="aspect-[3/4] bg-stone-100 relative">
+    {% with img=p.primary_image %}
+      {% if img %}<img src="{{ img.image.url }}" alt="{{ img.alt|default:p.name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.03] transition">
+      {% else %}<div class="w-full h-full flex items-center justify-center text-stone-300 text-sm">{% trans "Rasm yo'q" %}</div>{% endif %}
+    {% endwith %}
+    <div class="absolute top-2 left-2 flex flex-col gap-1">
+      {% if p.is_on_sale %}<span class="bg-brand text-white text-[11px] font-bold px-2 py-0.5 rounded">-{{ p.discount_percent }}%</span>{% endif %}
+      {% if p.is_new %}<span class="bg-stone-900 text-white text-[11px] font-bold px-2 py-0.5 rounded">{% trans "Yangi" %}</span>{% endif %}
+    </div>
+    {% if not p.in_stock %}<div class="absolute inset-x-0 bottom-0 bg-stone-900/70 text-white text-xs text-center py-1">{% trans "Tugagan" %}</div>{% endif %}
+  </div>
+  <div class="p-2.5">
+    {% if p.brand %}<div class="text-[11px] uppercase tracking-wide text-stone-400">{{ p.brand.name }}</div>{% endif %}
+    <div class="text-sm leading-tight line-clamp-2 min-h-[2.5em]">{{ p.name }}</div>
+    <div class="mt-1.5 flex items-baseline gap-2">
+      <span class="font-bold">{{ p.current_price|intcomma }} <span class="text-xs font-normal">{% trans "so'm" %}</span></span>
+      {% if p.is_on_sale %}<span class="text-xs text-stone-400 line-through">{{ p.price|intcomma }}</span>{% endif %}
+    </div>
+  </div>
+</a>

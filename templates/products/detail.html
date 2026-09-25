@@ -1,0 +1,141 @@
+{% extends "base.html" %}{% load i18n humanize %}
+{% block title %}{{ product.meta_title|default:product.name }} — {{ shop.name }}{% endblock %}
+{% block meta_description %}{{ product.meta_description|default:product.description|truncatechars:150 }}{% endblock %}
+{% block content %}
+<nav class="text-xs text-stone-500 mb-3">
+  <a href="{% url 'pages:home' %}">{% trans "Bosh sahifa" %}</a> ›
+  <a href="{{ product.category.parent.get_absolute_url }}">{{ product.category.parent.name }}</a> ›
+  <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a>
+</nav>
+
+<div class="grid md:grid-cols-2 gap-6 lg:gap-10">
+  <!-- Galereya -->
+  <div>
+    {% with imgs=product.images.all %}
+    <div class="aspect-[3/4] bg-white rounded-2xl border border-stone-200 overflow-hidden">
+      {% if imgs %}<img id="main-img" src="{{ imgs.0.image.url }}" alt="{{ imgs.0.alt|default:product.name }}" class="w-full h-full object-cover">
+      {% else %}<div class="w-full h-full flex items-center justify-center text-stone-300">{% trans "Rasm yo'q" %}</div>{% endif %}
+    </div>
+    {% if imgs|length > 1 %}
+    <div class="flex gap-2 mt-2 overflow-x-auto">
+      {% for im in imgs %}
+        <img src="{{ im.image.url }}" data-color="{{ im.color_id|default:'' }}" loading="lazy" onclick="document.getElementById('main-img').src=this.src"
+             class="thumb w-16 h-20 object-cover rounded-lg border border-stone-200 cursor-pointer hover:border-stone-900">
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Ma'lumot -->
+  <div>
+    {% if product.brand %}<a href="{{ product.brand.get_absolute_url }}" class="text-xs uppercase tracking-wide text-stone-500">{{ product.brand.name }}</a>{% endif %}
+    <h1 class="text-2xl font-bold leading-tight mt-1">{{ product.name }}</h1>
+
+    <div class="mt-3 flex items-baseline gap-3">
+      <span id="price" class="text-3xl font-black {% if product.is_on_sale %}text-brand{% endif %}">{{ product.current_price|intcomma }}</span><span class="text-stone-500">{% trans "so'm" %}</span>
+      {% if product.is_on_sale %}
+        <span class="text-stone-400 line-through">{{ product.price|intcomma }}</span>
+        <span class="bg-brand text-white text-xs font-bold px-2 py-0.5 rounded">-{{ product.discount_percent }}%</span>
+      {% endif %}
+    </div>
+
+    {% if colors %}
+    <div class="mt-5">
+      <div class="text-sm font-semibold mb-2">{% trans "Rang" %}: <span id="color-name" class="font-normal text-stone-600"></span></div>
+      <div class="flex flex-wrap gap-2">
+        {% for c in colors %}
+          <button type="button" class="color-btn w-9 h-9 rounded-full border-2 border-white ring-1 ring-stone-300 data-[on=1]:ring-2 data-[on=1]:ring-stone-900"
+                  data-color="{{ c.pk }}" data-name="{{ c.name }}" style="background:{{ c.hex_code }}" title="{{ c.name }}"></button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <div class="text-sm font-semibold mb-2">{% trans "O'lcham" %} <span class="font-normal text-stone-400">({{ product.size_type.name }})</span></div>
+      {% for color_id, vs in matrix.items %}
+      <div class="size-group hidden flex-wrap gap-2" data-color="{{ color_id }}">
+        {% for v in vs %}
+          <button type="button" {% if v.stock == 0 %}disabled{% endif %}
+                  class="size-btn px-3 py-2 rounded-lg border text-sm min-w-[3.2rem] {% if v.stock == 0 %}border-stone-200 text-stone-300 line-through cursor-not-allowed{% else %}border-stone-300 hover:border-stone-900 data-[on=1]:bg-stone-900 data-[on=1]:text-white data-[on=1]:border-stone-900{% endif %}"
+                  data-label="{{ v.size.label }}" data-price="{{ v.price|intcomma }}" data-stock="{{ v.stock }}" data-sku="{{ v.sku }}">{{ v.size.label }}</button>
+        {% endfor %}
+      </div>
+      {% endfor %}
+      <div id="stock-note" class="text-xs text-stone-500 mt-2"></div>
+    </div>
+    {% else %}
+      <p class="mt-5 text-stone-500">{% trans "Hozircha omborda yo'q." %}</p>
+    {% endif %}
+
+    <a id="order-btn" href="https://t.me/{{ shop.telegram }}" target="_blank"
+       class="mt-6 flex items-center justify-center gap-2 w-full bg-stone-900 hover:bg-black text-white rounded-xl py-3.5 font-semibold text-lg">
+      {% trans "Telegram orqali buyurtma" %}
+    </a>
+    <a href="tel:{{ shop.phone|cut:' ' }}" class="mt-2 block text-center border border-stone-300 rounded-xl py-3 font-medium">{% trans "Qo'ng'iroq" %}: {{ shop.phone }}</a>
+    <p class="text-xs text-stone-500 mt-2 text-center">{% trans "Yoki do'konga keling" %}: {{ shop.address }}</p>
+
+    <div class="mt-6 space-y-3 text-sm">
+      {% if product.description %}<p class="whitespace-pre-line">{{ product.description }}</p>{% endif %}
+      <dl class="grid grid-cols-[120px_1fr] gap-y-1 text-stone-600">
+        {% if product.material %}<dt>{% trans "Material" %}</dt><dd class="text-stone-900">{{ product.material }}</dd>{% endif %}
+        <dt>{% trans "Fasl" %}</dt><dd class="text-stone-900">{{ product.get_season_display }}</dd>
+        {% if product.age_groups.all %}<dt>{% trans "Yosh" %}</dt><dd class="text-stone-900">{% for a in product.age_groups.all %}<a href="{{ a.get_absolute_url }}" class="underline">{{ a.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</dd>{% endif %}
+        {% if product.care_notes %}<dt>{% trans "Parvarish" %}</dt><dd class="text-stone-900">{{ product.care_notes }}</dd>{% endif %}
+      </dl>
+    </div>
+  </div>
+</div>
+
+{% if related %}
+<section class="mt-12">
+  <h2 class="text-lg font-bold mb-3">{% trans "O'xshash mahsulotlar" %}</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">{% for p in related %}{% include "products/_card.html" %}{% endfor %}</div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  const tg = "https://t.me/{{ shop.telegram }}";
+  const product = "{{ product.name|escapejs }}";
+  const url = location.href;
+  const colorBtns = [...document.querySelectorAll('.color-btn')];
+  const groups = [...document.querySelectorAll('.size-group')];
+  const orderBtn = document.getElementById('order-btn');
+  const note = document.getElementById('stock-note');
+  let color = null, size = null;
+
+  function updateOrder() {
+    let text = `{% trans "Salom! Buyurtma bermoqchiman" %}: ${product}`;
+    if (color) text += `, {% trans "rang" %}: ${color.dataset.name}`;
+    if (size) text += `, {% trans "o'lcham" %}: ${size.dataset.label} (${size.dataset.sku})`;
+    text += `\n${url}`;
+    orderBtn.href = tg + "?text=" + encodeURIComponent(text);
+  }
+  function pickColor(btn) {
+    color = btn; size = null;
+    colorBtns.forEach(b => b.dataset.on = b === btn ? 1 : 0);
+    document.getElementById('color-name').textContent = btn.dataset.name;
+    groups.forEach(g => { g.classList.toggle('hidden', g.dataset.color !== btn.dataset.color); g.classList.toggle('flex', g.dataset.color === btn.dataset.color); });
+    document.querySelectorAll('.size-btn').forEach(b => b.dataset.on = 0);
+    note.textContent = '';
+    const thumbs = [...document.querySelectorAll('.thumb')].filter(t => t.dataset.color === btn.dataset.color);
+    if (thumbs.length) document.getElementById('main-img').src = thumbs[0].src;
+    updateOrder();
+  }
+  colorBtns.forEach(b => b.onclick = () => pickColor(b));
+  document.querySelectorAll('.size-btn').forEach(b => b.onclick = () => {
+    size = b;
+    b.closest('.size-group').querySelectorAll('.size-btn').forEach(x => x.dataset.on = 0);
+    b.dataset.on = 1;
+    document.getElementById('price').textContent = b.dataset.price;
+    const s = +b.dataset.stock;
+    note.textContent = s <= 3 ? `{% trans "Faqat" %} ${s} {% trans "ta qoldi" %}` : `{% trans "Mavjud" %}`;
+    updateOrder();
+  });
+  if (colorBtns.length) pickColor(colorBtns[0]); else updateOrder();
+})();
+</script>
+{% endblock %}

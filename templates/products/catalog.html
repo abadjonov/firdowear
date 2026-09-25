@@ -1,0 +1,55 @@
+{% extends "base.html" %}{% load i18n humanize %}
+{% block title %}{{ title }} — {{ shop.name }}{% endblock %}
+{% block content %}
+<nav class="text-xs text-stone-500 mb-3">
+  <a href="{% url 'pages:home' %}">{% trans "Bosh sahifa" %}</a> ›
+  <a href="{% url 'products:catalog' %}">{% trans "Katalog" %}</a>
+  {% if category.parent %} › <a href="{{ category.parent.get_absolute_url }}">{{ category.parent.name }}</a>{% endif %}
+  › <span class="text-stone-900">{{ title }}</span>
+</nav>
+<h1 class="text-2xl font-bold">{{ title }}{% if request.GET.q %}: «{{ request.GET.q }}»{% endif %}</h1>
+
+{% if children %}
+<div class="flex gap-2 overflow-x-auto py-3 -mx-4 px-4">
+  {% for ch in children %}<a href="{{ ch.get_absolute_url }}" class="shrink-0 bg-white border border-stone-200 px-3 py-1.5 rounded-full text-sm hover:border-stone-900">{{ ch.name }}</a>{% endfor %}
+</div>
+{% endif %}
+
+<div class="md:grid md:grid-cols-[220px_1fr] gap-6 mt-3">
+  <details class="md:hidden mb-3 bg-white rounded-xl border border-stone-200">
+    <summary class="px-4 py-2.5 font-medium cursor-pointer">{% trans "Filtr" %}</summary>
+    <div class="px-4 pb-4">{% include "products/_filters.html" %}</div>
+  </details>
+  <aside class="hidden md:block bg-white rounded-xl border border-stone-200 p-4 h-fit sticky top-28">{% include "products/_filters.html" %}</aside>
+
+  <section>
+    <div class="flex items-center justify-between text-sm mb-3">
+      <span class="text-stone-500">{{ page.paginator.count }} {% trans "ta mahsulot" %}</span>
+      <form id="sortf" class="flex items-center gap-2">
+        {% for k, v in request.GET.items %}{% if k != 'sort' and k != 'page' %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endif %}{% endfor %}
+        <select name="sort" onchange="this.form.submit()" class="border border-stone-300 rounded-lg px-2 py-1 bg-white">
+          <option value="new" {% if request.GET.sort == 'new' or not request.GET.sort %}selected{% endif %}>{% trans "Yangi" %}</option>
+          <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>{% trans "Arzon → qimmat" %}</option>
+          <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>{% trans "Qimmat → arzon" %}</option>
+        </select>
+      </form>
+    </div>
+
+    {% if page.object_list %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      {% for p in page.object_list %}{% include "products/_card.html" %}{% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white rounded-xl border border-dashed border-stone-300 p-10 text-center text-stone-500">{% trans "Hech narsa topilmadi. Filtrni o'zgartirib ko'ring." %}</div>
+    {% endif %}
+
+    {% if page.has_other_pages %}
+    <div class="flex justify-center gap-2 mt-6 text-sm">
+      {% if page.has_previous %}<a class="px-3 py-1.5 bg-white border rounded-lg" href="?{{ querystring }}&page={{ page.previous_page_number }}">‹</a>{% endif %}
+      <span class="px-3 py-1.5">{{ page.number }} / {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}<a class="px-3 py-1.5 bg-white border rounded-lg" href="?{{ querystring }}&page={{ page.next_page_number }}">›</a>{% endif %}
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

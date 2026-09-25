@@ -1,0 +1,114 @@
+{% load i18n static humanize %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ shop.name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{% trans "O'g'il bolalar kiyimi 0–18 yosh. Toshkent." %}{% endblock %}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{DEFAULT:'#E53935',dark:'#C62828',light:'#FDECEA'}}}}}</script>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body class="bg-stone-50 text-stone-900 antialiased">
+
+<header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-stone-200">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="h-14 flex items-center gap-3">
+      <button id="menu-btn" class="md:hidden p-2 -ml-2" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <a href="{% url 'pages:home' %}" class="text-2xl font-black tracking-tight leading-none">Firdo<span class="text-brand">.</span></a>
+
+      <form action="{% url 'products:catalog' %}" class="hidden md:flex flex-1 max-w-md mx-4">
+        <input name="q" value="{{ request.GET.q }}" placeholder="{% trans 'Qidirish: jinsi 134, kurtka...' %}"
+               class="w-full rounded-l-lg border border-stone-300 px-3 py-1.5 text-sm focus:outline-none focus:border-stone-900">
+        <button class="rounded-r-lg bg-stone-900 text-white px-3 text-sm">{% trans "Qidir" %}</button>
+      </form>
+
+      <div class="ml-auto flex items-center gap-2 text-sm">
+        <form action="{% url 'set_language' %}" method="post" class="flex gap-1">{% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          {% get_current_language as CUR %}
+          {% for code, name in LANGUAGES %}
+            <button name="language" value="{{ code }}" class="px-2 py-1 rounded {% if code == CUR %}bg-stone-900 text-white{% else %}text-stone-500 hover:bg-stone-100{% endif %}">{{ code|upper }}</button>
+          {% endfor %}
+        </form>
+        <a href="https://t.me/{{ shop.telegram }}" class="hidden sm:inline-flex items-center gap-1 bg-stone-900 hover:bg-black text-white px-3 py-1.5 rounded-lg font-medium">Telegram</a>
+      </div>
+    </div>
+
+    <nav id="nav" class="hidden md:flex gap-1 pb-2 overflow-x-auto text-sm">
+      {% for c in menu_categories %}
+        <div class="relative group shrink-0">
+          <a href="{{ c.get_absolute_url }}" class="block px-3 py-1.5 rounded-lg hover:bg-stone-100 whitespace-nowrap">{{ c.name }}</a>
+          {% if c.children.all %}
+          <div class="hidden group-hover:block absolute left-0 top-full bg-white border border-stone-200 rounded-lg shadow-lg py-1 min-w-[180px] z-40">
+            {% for ch in c.children.all %}{% if ch.is_active %}
+              <a href="{{ ch.get_absolute_url }}" class="block px-4 py-1.5 hover:bg-stone-50">{{ ch.name }}</a>
+            {% endif %}{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <span class="border-l border-stone-200 mx-1"></span>
+      {% for a in menu_age_groups %}
+        <a href="{{ a.get_absolute_url }}" class="shrink-0 px-3 py-1.5 rounded-lg text-stone-600 hover:bg-stone-100 whitespace-nowrap">{{ a.name }}</a>
+      {% endfor %}
+      <a href="{% url 'pages:contact' %}" class="shrink-0 px-3 py-1.5 rounded-lg text-stone-600 hover:bg-stone-100 md:ml-auto">{% trans "Manzil" %}</a>
+    </nav>
+  </div>
+
+  <!-- mobil menyu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-stone-200 bg-white px-4 py-3 space-y-3 max-h-[80vh] overflow-y-auto">
+    <form action="{% url 'products:catalog' %}" class="flex">
+      <input name="q" placeholder="{% trans 'Qidirish' %}" class="w-full rounded-l-lg border border-stone-300 px-3 py-2 text-sm">
+      <button class="rounded-r-lg bg-stone-900 text-white px-3 text-sm">{% trans "Qidir" %}</button>
+    </form>
+    {% for c in menu_categories %}
+      <div>
+        <a href="{{ c.get_absolute_url }}" class="font-semibold">{{ c.name }}</a>
+        <div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-sm text-stone-600">
+          {% for ch in c.children.all %}{% if ch.is_active %}<a href="{{ ch.get_absolute_url }}">{{ ch.name }}</a>{% endif %}{% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+    <div class="flex flex-wrap gap-2 pt-2 border-t border-stone-100">
+      {% for a in menu_age_groups %}<a href="{{ a.get_absolute_url }}" class="text-sm bg-stone-100 px-3 py-1 rounded-full">{{ a.name }}</a>{% endfor %}
+    </div>
+    <a href="{% url 'pages:contact' %}" class="block text-sm font-medium">{% trans "Manzil va aloqa" %}</a>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-5">
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="mt-12 border-t border-stone-200 bg-white">
+  <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 sm:grid-cols-3 text-sm">
+    <div>
+      <div class="font-black text-2xl leading-none">Firdo<span class="text-brand">.</span></div>
+      <p class="text-stone-500 mt-1">{% trans "O'g'il bolalar kiyimi va poyabzali, 0–18 yosh." %}</p>
+    </div>
+    <div>
+      <div class="font-semibold mb-1">{% trans "Do'kon" %}</div>
+      <p>{{ shop.address }}</p>
+      <p class="text-stone-500">{{ shop.hours }}</p>
+      <a href="tel:{{ shop.phone|cut:' ' }}" class="block mt-1 font-medium">{{ shop.phone }}</a>
+    </div>
+    <div>
+      <div class="font-semibold mb-1">{% trans "Ijtimoiy tarmoqlar" %}</div>
+      <a href="https://t.me/{{ shop.telegram }}" class="block">Telegram: @{{ shop.telegram }}</a>
+      <a href="https://instagram.com/{{ shop.instagram }}" class="block">Instagram: @{{ shop.instagram }}</a>
+    </div>
+  </div>
+  <div class="text-center text-xs text-stone-400 pb-4">© {% now "Y" %} {{ shop.name }}</div>
+</footer>
+
+<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>
+
+<script>
+  document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

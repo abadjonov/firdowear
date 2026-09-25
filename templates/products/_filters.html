@@ -1,0 +1,72 @@
+{% load i18n %}
+<form method="get" class="space-y-4 text-sm">
+  {% if request.GET.q %}<input type="hidden" name="q" value="{{ request.GET.q }}">{% endif %}
+  {% if request.GET.sort %}<input type="hidden" name="sort" value="{{ request.GET.sort }}">{% endif %}
+
+  <label class="flex items-center gap-2"><input type="checkbox" name="stock" value="1" {% if request.GET.stock %}checked{% endif %}> {% trans "Faqat mavjud" %}</label>
+  <label class="flex items-center gap-2"><input type="checkbox" name="sale" value="1" {% if request.GET.sale %}checked{% endif %}> {% trans "Chegirmada" %}</label>
+
+  {% if not age_group %}
+  <div>
+    <div class="font-semibold mb-1">{% trans "Yosh" %}</div>
+    <select name="age" class="w-full border border-stone-300 rounded-lg px-2 py-1.5 bg-white">
+      <option value="">{% trans "Barchasi" %}</option>
+      {% for a in filter_age_groups %}<option value="{{ a.slug }}" {% if request.GET.age == a.slug %}selected{% endif %}>{{ a.name }}</option>{% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  <div>
+    <div class="font-semibold mb-1">{% trans "O'lcham" %}</div>
+    <select name="size" class="w-full border border-stone-300 rounded-lg px-2 py-1.5 bg-white">
+      <option value="">{% trans "Barchasi" %}</option>
+      {% regroup filter_sizes by size_type as size_groups %}
+      {% for g in size_groups %}<optgroup label="{{ g.grouper.name }}">
+        {% for s in g.list %}<option value="{{ s.code }}" {% if request.GET.size == s.code %}selected{% endif %}>{{ s.label }}</option>{% endfor %}
+      </optgroup>{% endfor %}
+    </select>
+  </div>
+
+  {% if not brand and filter_brands %}
+  <div>
+    <div class="font-semibold mb-1">{% trans "Brend" %}</div>
+    <select name="brand" class="w-full border border-stone-300 rounded-lg px-2 py-1.5 bg-white">
+      <option value="">{% trans "Barchasi" %}</option>
+      {% for b in filter_brands %}<option value="{{ b.slug }}" {% if request.GET.brand == b.slug %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+    </select>
+  </div>
+  {% endif %}
+
+  <div>
+    <div class="font-semibold mb-1">{% trans "Rang" %}</div>
+    <div class="flex flex-wrap gap-1.5">
+      {% for c in filter_colors %}
+        <label title="{{ c.name }}" class="cursor-pointer">
+          <input type="radio" name="color" value="{{ c.slug }}" class="peer sr-only" {% if request.GET.color == c.slug %}checked{% endif %}>
+          <span class="block w-7 h-7 rounded-full border-2 border-white ring-1 ring-stone-300 peer-checked:ring-2 peer-checked:ring-stone-900" style="background:{{ c.hex_code }}"></span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <div class="font-semibold mb-1">{% trans "Fasl" %}</div>
+    <select name="season" class="w-full border border-stone-300 rounded-lg px-2 py-1.5 bg-white">
+      <option value="">{% trans "Barchasi" %}</option>
+      {% for k, v in seasons %}<option value="{{ k }}" {% if request.GET.season == k %}selected{% endif %}>{{ v }}</option>{% endfor %}
+    </select>
+  </div>
+
+  <div>
+    <div class="font-semibold mb-1">{% trans "Narx, so'm" %}</div>
+    <div class="flex gap-2">
+      <input name="min" value="{{ request.GET.min }}" placeholder="{% trans 'dan' %}" inputmode="numeric" class="w-1/2 border border-stone-300 rounded-lg px-2 py-1.5">
+      <input name="max" value="{{ request.GET.max }}" placeholder="{% trans 'gacha' %}" inputmode="numeric" class="w-1/2 border border-stone-300 rounded-lg px-2 py-1.5">
+    </div>
+  </div>
+
+  <div class="flex gap-2">
+    <button class="flex-1 bg-stone-900 text-white rounded-lg py-2 font-medium">{% trans "Qo'llash" %}</button>
+    <a href="{{ request.path }}" class="px-3 py-2 border border-stone-300 rounded-lg">✕</a>
+  </div>
+</form>

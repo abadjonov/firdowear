@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Manzil va aloqa" %} — {{ shop.name }}{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold">{% trans "Manzil va aloqa" %}</h1>
+<div class="grid md:grid-cols-2 gap-6 mt-4">
+  <div class="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
+    <div><div class="text-xs uppercase text-stone-400">{% trans "Manzil" %}</div><div class="font-medium">{{ shop.address }}</div></div>
+    <div><div class="text-xs uppercase text-stone-400">{% trans "Ish vaqti" %}</div><div class="font-medium">{{ shop.hours }}</div></div>
+    <div><div class="text-xs uppercase text-stone-400">{% trans "Telefon" %}</div><a href="tel:{{ shop.phone|cut:' ' }}" class="font-medium text-brand">{{ shop.phone }}</a></div>
+    <div class="flex gap-2 pt-2">
+      <a href="https://t.me/{{ shop.telegram }}" class="flex-1 text-center bg-stone-900 text-white rounded-xl py-2.5 font-medium">Telegram</a>
+      <a href="https://instagram.com/{{ shop.instagram }}" class="flex-1 text-center bg-white border-2 border-stone-900 text-stone-900 rounded-xl py-2.5 font-medium">Instagram</a>
+    </div>
+  </div>
+  <div class="bg-white rounded-2xl border border-stone-200 overflow-hidden min-h-[300px]">
+    {% if shop.map_embed %}{{ shop.map_embed|safe }}
+    {% else %}<div class="h-full min-h-[300px] flex items-center justify-center text-stone-400 text-sm p-6 text-center">{% trans "Xarita: .env faylida SHOP_MAP_EMBED ga Yandex/Google iframe kodini qo'ying." %}</div>{% endif %}
+  </div>
+</div>
+{% endblock %}
