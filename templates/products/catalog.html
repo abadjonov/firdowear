@@ -1,5 +1,7 @@
 {% extends "base.html" %}{% load i18n humanize %}
-{% block title %}{{ title }} — {{ shop.name }}{% endblock %}
+{% block title %}{% if category.meta_title %}{{ category.meta_title }}{% else %}{{ title }} — {{ shop.name }}{% endif %}{% endblock %}
+{% block og_title %}{{ title }} — {{ shop.name }}{% endblock %}
+{% block meta_description %}{% if category.meta_description %}{{ category.meta_description }}{% else %}{{ title }} — {% trans "o'g'il bolalar uchun" %}. {{ shop.name }}, {{ shop.address }}.{% endif %}{% endblock %}
 {% block content %}
 <nav class="text-xs text-stone-500 mb-3">
   <a href="{% url 'pages:home' %}">{% trans "Bosh sahifa" %}</a> ›

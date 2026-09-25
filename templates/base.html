@@ -1,10 +1,21 @@
-{% load i18n static humanize %}<!DOCTYPE html>
+{% load i18n static humanize seo %}<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ shop.name }}{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{% trans "O'g'il bolalar kiyimi 0–18 yosh. Toshkent." %}{% endblock %}">
+  {% get_current_language as CUR_LANG %}
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+  {% for code, name in LANGUAGES %}<link rel="alternate" hreflang="{{ code }}" href="{{ request.scheme }}://{{ request.get_host }}{% translate_url code %}">
+  {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ request.scheme }}://{{ request.get_host }}{% translate_url 'uz' %}">
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:locale" content="{% if CUR_LANG == 'ru' %}ru_RU{% else %}uz_UZ{% endif %}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ shop.name }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{% trans "O'g'il bolalar kiyimi 0–18 yosh. Toshkent." %}{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  {% block og_image %}{% endblock %}
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{colors:{brand:{DEFAULT:'#E53935',dark:'#C62828',light:'#FDECEA'}}}}}</script>
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
@@ -33,7 +44,10 @@
             <button name="language" value="{{ code }}" class="px-2 py-1 rounded {% if code == CUR %}bg-stone-900 text-white{% else %}text-stone-500 hover:bg-stone-100{% endif %}">{{ code|upper }}</button>
           {% endfor %}
         </form>
-        <a href="https://t.me/{{ shop.telegram }}" class="hidden sm:inline-flex items-center gap-1 bg-stone-900 hover:bg-black text-white px-3 py-1.5 rounded-lg font-medium">Telegram</a>
+        <a href="{% url 'orders:cart' %}" class="relative p-2" aria-label="{% trans 'Savat' %}">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          {% if cart_count %}<span class="absolute -top-0.5 -right-0.5 bg-brand text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">{{ cart_count }}</span>{% endif %}
+        </a>
       </div>
     </div>
 
@@ -80,6 +94,7 @@
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-5">
+  {% for m in messages %}<div class="mb-4 rounded-xl px-4 py-3 text-sm {% if m.tags == 'error' %}bg-brand-light text-brand-dark{% else %}bg-stone-900 text-white{% endif %}">{{ m }}{% if m.tags == 'success' %} · <a href="{% url 'orders:cart' %}" class="underline">{% trans "Savatga o'tish" %}</a>{% endif %}</div>{% endfor %}
   {% block content %}{% endblock %}
 </main>
 
@@ -104,7 +119,8 @@
   <div class="text-center text-xs text-stone-400 pb-4">© {% now "Y" %} {{ shop.name }}</div>
 </footer>
 
-<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>
+{% if cart_count %}<a href="{% url 'orders:cart' %}" class="sm:hidden fixed bottom-4 right-4 bg-brand text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">{% trans "Savat" %} · {{ cart_count }}</a>
+{% else %}<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>{% endif %}
 
 <script>
   document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');

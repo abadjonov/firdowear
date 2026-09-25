@@ -1,6 +1,19 @@
 {% extends "base.html" %}{% load i18n humanize %}
 {% block title %}{{ product.meta_title|default:product.name }} — {{ shop.name }}{% endblock %}
 {% block meta_description %}{{ product.meta_description|default:product.description|truncatechars:150 }}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ product.name }} — {{ product.current_price|intcomma }} {% trans "so'm" %}{% endblock %}
+{% block og_description %}{{ product.meta_description|default:product.description|truncatechars:150 }}{% endblock %}
+{% block og_image %}{% with img=product.primary_image %}{% if img %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ img.large_url }}">{% endif %}{% endwith %}
+<meta property="product:price:amount" content="{{ product.current_price }}"><meta property="product:price:currency" content="UZS">
+<script type="application/ld+json">{
+ "@context":"https://schema.org","@type":"Product","name":"{{ product.name|escapejs }}",
+ {% if product.brand %}"brand":{"@type":"Brand","name":"{{ product.brand.name|escapejs }}"},{% endif %}
+ "description":"{{ product.description|truncatechars:200|escapejs }}",
+ {% with img=product.primary_image %}{% if img %}"image":"{{ request.scheme }}://{{ request.get_host }}{{ img.large_url }}",{% endif %}{% endwith %}
+ "offers":{"@type":"Offer","priceCurrency":"UZS","price":"{{ product.current_price }}","url":"{{ request.build_absolute_uri }}",
+  "availability":"https://schema.org/{% if product.in_stock %}InStock{% else %}OutOfStock{% endif %}"}
+}</script>{% endblock %}
 {% block content %}
 <nav class="text-xs text-stone-500 mb-3">
   <a href="{% url 'pages:home' %}">{% trans "Bosh sahifa" %}</a> ›
@@ -13,13 +26,13 @@
   <div>
     {% with imgs=product.images.all %}
     <div class="aspect-[3/4] bg-white rounded-2xl border border-stone-200 overflow-hidden">
-      {% if imgs %}<img id="main-img" src="{{ imgs.0.image.url }}" alt="{{ imgs.0.alt|default:product.name }}" class="w-full h-full object-cover">
+      {% if imgs %}<img id="main-img" src="{{ imgs.0.large_url }}" alt="{{ imgs.0.alt|default:product.name }}" class="w-full h-full object-cover">
       {% else %}<div class="w-full h-full flex items-center justify-center text-stone-300">{% trans "Rasm yo'q" %}</div>{% endif %}
     </div>
     {% if imgs|length > 1 %}
     <div class="flex gap-2 mt-2 overflow-x-auto">
       {% for im in imgs %}
-        <img src="{{ im.image.url }}" data-color="{{ im.color_id|default:'' }}" loading="lazy" onclick="document.getElementById('main-img').src=this.src"
+        <img src="{{ im.thumb_url }}" data-large="{{ im.large_url }}" data-color="{{ im.color_id|default:'' }}" loading="lazy" onclick="document.getElementById('main-img').src=this.dataset.large"
              class="thumb w-16 h-20 object-cover rounded-lg border border-stone-200 cursor-pointer hover:border-stone-900">
       {% endfor %}
     </div>
@@ -58,7 +71,7 @@
         {% for v in vs %}
           <button type="button" {% if v.stock == 0 %}disabled{% endif %}
                   class="size-btn px-3 py-2 rounded-lg border text-sm min-w-[3.2rem] {% if v.stock == 0 %}border-stone-200 text-stone-300 line-through cursor-not-allowed{% else %}border-stone-300 hover:border-stone-900 data-[on=1]:bg-stone-900 data-[on=1]:text-white data-[on=1]:border-stone-900{% endif %}"
-                  data-label="{{ v.size.label }}" data-price="{{ v.price|intcomma }}" data-stock="{{ v.stock }}" data-sku="{{ v.sku }}">{{ v.size.label }}</button>
+                  data-id="{{ v.pk }}" data-label="{{ v.size.label }}" data-price="{{ v.price|intcomma }}" data-stock="{{ v.stock }}" data-sku="{{ v.sku }}">{{ v.size.label }}</button>
         {% endfor %}
       </div>
       {% endfor %}
@@ -68,9 +81,17 @@
       <p class="mt-5 text-stone-500">{% trans "Hozircha omborda yo'q." %}</p>
     {% endif %}
 
+    <form method="post" action="{% url 'orders:cart_add' %}" class="mt-6">{% csrf_token %}
+      <input type="hidden" name="variant" id="variant-id" value="">
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button id="add-btn" type="submit" disabled
+              class="w-full bg-stone-900 hover:bg-black disabled:bg-stone-300 disabled:cursor-not-allowed text-white rounded-xl py-3.5 font-semibold text-lg">
+        <span data-empty>{% trans "O'lchamni tanlang" %}</span><span data-ready class="hidden">{% trans "Savatga qo'shish" %}</span>
+      </button>
+    </form>
     <a id="order-btn" href="https://t.me/{{ shop.telegram }}" target="_blank"
-       class="mt-6 flex items-center justify-center gap-2 w-full bg-stone-900 hover:bg-black text-white rounded-xl py-3.5 font-semibold text-lg">
-      {% trans "Telegram orqali buyurtma" %}
+       class="mt-2 flex items-center justify-center gap-2 w-full border-2 border-stone-900 rounded-xl py-3 font-semibold">
+      {% trans "Telegram orqali so'rash" %}
     </a>
     <a href="tel:{{ shop.phone|cut:' ' }}" class="mt-2 block text-center border border-stone-300 rounded-xl py-3 font-medium">{% trans "Qo'ng'iroq" %}: {{ shop.phone }}</a>
     <p class="text-xs text-stone-500 mt-2 text-center">{% trans "Yoki do'konga keling" %}: {{ shop.address }}</p>
@@ -105,6 +126,13 @@
   const groups = [...document.querySelectorAll('.size-group')];
   const orderBtn = document.getElementById('order-btn');
   const note = document.getElementById('stock-note');
+  const addBtn = document.getElementById('add-btn'), variantInput = document.getElementById('variant-id');
+  function setAdd(v) {
+    variantInput.value = v ? v.dataset.id : '';
+    addBtn.disabled = !v;
+    addBtn.querySelector('[data-empty]').classList.toggle('hidden', !!v);
+    addBtn.querySelector('[data-ready]').classList.toggle('hidden', !v);
+  }
   let color = null, size = null;
 
   function updateOrder() {
@@ -120,9 +148,9 @@
     document.getElementById('color-name').textContent = btn.dataset.name;
     groups.forEach(g => { g.classList.toggle('hidden', g.dataset.color !== btn.dataset.color); g.classList.toggle('flex', g.dataset.color === btn.dataset.color); });
     document.querySelectorAll('.size-btn').forEach(b => b.dataset.on = 0);
-    note.textContent = '';
+    note.textContent = ''; setAdd(null);
     const thumbs = [...document.querySelectorAll('.thumb')].filter(t => t.dataset.color === btn.dataset.color);
-    if (thumbs.length) document.getElementById('main-img').src = thumbs[0].src;
+    if (thumbs.length) document.getElementById('main-img').src = thumbs[0].dataset.large;
     updateOrder();
   }
   colorBtns.forEach(b => b.onclick = () => pickColor(b));
@@ -133,7 +161,7 @@
     document.getElementById('price').textContent = b.dataset.price;
     const s = +b.dataset.stock;
     note.textContent = s <= 3 ? `{% trans "Faqat" %} ${s} {% trans "ta qoldi" %}` : `{% trans "Mavjud" %}`;
-    updateOrder();
+    setAdd(b); updateOrder();
   });
   if (colorBtns.length) pickColor(colorBtns[0]); else updateOrder();
 })();

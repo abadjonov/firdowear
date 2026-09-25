@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load i18n humanize %}
+{% block title %}{% trans "Rahmat!" %} — {{ shop.name }}{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white rounded-2xl border border-stone-200 p-8 text-center">
+  <div class="w-16 h-16 mx-auto rounded-full bg-stone-900 text-white flex items-center justify-center text-3xl">✓</div>
+  <h1 class="text-2xl font-bold mt-4">{% trans "Buyurtma qabul qilindi" %} #{{ order.pk }}</h1>
+  <p class="text-stone-600 mt-2">{% blocktrans with phone=order.phone %}Tez orada {{ phone }} raqamiga qo'ng'iroq qilamiz.{% endblocktrans %}</p>
+  <div class="mt-5 text-left text-sm space-y-1 bg-stone-50 rounded-xl p-4">
+    {% for i in order.items.all %}<div class="flex justify-between"><span>{{ i.product_name }}, {{ i.color_name }}, {{ i.size_label }} × {{ i.qty }}</span><span>{{ i.subtotal|intcomma }}</span></div>{% endfor %}
+    <div class="flex justify-between font-bold border-t pt-1 mt-1"><span>{% trans "Jami" %}</span><span>{{ order.total|intcomma }} {% trans "so'm" %}</span></div>
+  </div>
+  <a href="{% url 'pages:home' %}" class="inline-block mt-6 bg-stone-900 text-white px-6 py-2.5 rounded-xl">{% trans "Bosh sahifa" %}</a>
+</div>
+{% endblock %}

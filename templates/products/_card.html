@@ -2,7 +2,7 @@
 <a href="{{ p.get_absolute_url }}" class="group block bg-white rounded-xl border border-stone-200 overflow-hidden hover:shadow-md transition">
   <div class="aspect-[3/4] bg-stone-100 relative">
     {% with img=p.primary_image %}
-      {% if img %}<img src="{{ img.image.url }}" alt="{{ img.alt|default:p.name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.03] transition">
+      {% if img %}<img src="{{ img.thumb_url }}" alt="{{ img.alt|default:p.name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.03] transition">
       {% else %}<div class="w-full h-full flex items-center justify-center text-stone-300 text-sm">{% trans "Rasm yo'q" %}</div>{% endif %}
     {% endwith %}
     <div class="absolute top-2 left-2 flex flex-col gap-1">
