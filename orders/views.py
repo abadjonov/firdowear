@@ -7,12 +7,13 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from products.models import ProductVariant
+from products.models import Product, ProductVariant
 
 from .cart import Cart
-from .forms import CheckoutForm
+from .forms import CheckoutForm, TrackForm
 from .models import Order, OrderItem
 from .telegram import order_message, send_message
+from .tracking import ORDERS_KEY, get_favorites, normalize_phone, remember_order, toggle_favorite
 
 
 def cart_view(request):
@@ -74,6 +75,7 @@ def checkout(request):
         order.save(update_fields=["telegram_sent"])
         cart.clear()
         request.session["last_order"] = order.pk
+        remember_order(request.session, order.pk)
         return redirect("orders:success", pk=order.pk)
 
     return render(request, "orders/checkout.html", {"form": form, "items": items, "total": cart.total()})
@@ -84,3 +86,41 @@ def success(request, pk):
         return redirect("pages:home")
     order = get_object_or_404(Order, pk=pk)
     return render(request, "orders/success.html", {"order": order})
+
+
+# --- Sevimlilar (sessiyada) ---
+@require_POST
+def favorite_toggle(request):
+    try:
+        pid = int(request.POST.get("product", ""))
+    except ValueError:
+        return JsonResponse({"error": "bad product"}, status=400)
+    if not Product.objects.active().filter(pk=pid).exists() and pid not in get_favorites(request.session):
+        return JsonResponse({"error": "not found"}, status=404)
+    active, count = toggle_favorite(request.session, pid)
+    if request.headers.get("x-requested-with") == "fetch":
+        return JsonResponse({"active": active, "count": count})
+    return redirect(request.POST.get("next") or "orders:favorites")
+
+
+def favorites(request):
+    ids = get_favorites(request.session)
+    qs = Product.objects.active().filter(pk__in=ids).select_related("brand").prefetch_related("images", "variants")
+    by_id = {p.pk: p for p in qs}
+    products = [by_id[i] for i in ids if i in by_id]
+    return render(request, "orders/favorites.html", {"products": products})
+
+
+# --- Buyurtmani tekshirish ---
+def track(request):
+    form = TrackForm(request.POST or None)
+    found = None
+    if request.method == "POST" and form.is_valid():
+        order = Order.objects.filter(pk=form.cleaned_data["number"]).prefetch_related("items").first()
+        if order and normalize_phone(order.phone) == normalize_phone(form.cleaned_data["phone"]):
+            found = order
+            remember_order(request.session, order.pk)
+        else:
+            form.add_error(None, _("Buyurtma topilmadi. Raqam va telefonni tekshiring."))
+    history = Order.objects.filter(pk__in=request.session.get(ORDERS_KEY, [])).prefetch_related("items")
+    return render(request, "orders/track.html", {"form": form, "found": found, "history": history})

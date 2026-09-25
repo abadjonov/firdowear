@@ -9,6 +9,7 @@
     {% for i in order.items.all %}<div class="flex justify-between"><span>{{ i.product_name }}, {{ i.color_name }}, {{ i.size_label }} × {{ i.qty }}</span><span>{{ i.subtotal|intcomma }}</span></div>{% endfor %}
     <div class="flex justify-between font-bold border-t pt-1 mt-1"><span>{% trans "Jami" %}</span><span>{{ order.total|intcomma }} {% trans "so'm" %}</span></div>
   </div>
+  <p class="text-xs text-stone-500 mt-4">{% trans "Holatini istalgan vaqtda tekshirishingiz mumkin:" %} <a href="{% url 'orders:track' %}" class="underline">{% trans "Buyurtmani tekshirish" %}</a></p>
   <a href="{% url 'pages:home' %}" class="inline-block mt-6 bg-stone-900 text-white px-6 py-2.5 rounded-xl">{% trans "Bosh sahifa" %}</a>
 </div>
 {% endblock %}
