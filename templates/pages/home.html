@@ -3,8 +3,8 @@
 <section class="rounded-2xl bg-stone-900 text-white relative overflow-hidden p-6 sm:p-10">
   <span class="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-brand/90"></span>
   <p class="relative text-stone-300 text-sm font-medium"><span class="text-brand">●</span> {% trans "O'g'il bolalar uchun" %} · 0–18</p>
-  <h1 class="relative text-3xl sm:text-4xl font-black mt-1 leading-tight">{% trans "Kiyim va poyabzal — bog'chadan bitiruvgacha" %}</h1>
-  <p class="relative mt-2 text-stone-300 max-w-lg">{% trans "Turli brendlar, haqiqiy qoldiq. Saytda tanlang, Telegramda buyurtma bering yoki do'konga keling." %}</p>
+  <h1 class="relative text-3xl sm:text-4xl font-black mt-1 leading-tight">{% trans "Kiyim va poyabzal — bog'chadan maktab bitiruvgacha" %}</h1>
+  <p class="relative mt-2 text-stone-300 max-w-lg">{% trans "Turli brendlar, haqiqiy sifat. Saytda tanlang, Telegramda buyurtma bering yoki do'konga keling." %}</p>
   <div class="relative mt-5 flex flex-wrap gap-2">
     {% for a in menu_age_groups %}<a href="{{ a.get_absolute_url }}" class="bg-white text-stone-900 hover:bg-brand hover:text-white px-4 py-2 rounded-full text-sm font-medium">{{ a.name }}</a>{% endfor %}
   </div>
