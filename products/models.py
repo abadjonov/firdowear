@@ -244,6 +244,8 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
     color = models.ForeignKey(Color, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_("Rang"))
     image = models.ImageField(_("Rasm"), upload_to="products/%Y/%m/")
+    thumb = models.ImageField(upload_to="products/%Y/%m/thumb/", blank=True, editable=False)
+    large = models.ImageField(upload_to="products/%Y/%m/large/", blank=True, editable=False)
     alt = models.CharField(max_length=160, blank=True)
     is_primary = models.BooleanField(_("Asosiy"), default=False)
     sort_order = models.PositiveSmallIntegerField(default=0)
@@ -255,6 +257,30 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product} #{self.pk}"
+
+    @property
+    def thumb_url(self):
+        return (self.thumb or self.image).url
+
+    @property
+    def large_url(self):
+        return (self.large or self.image).url
+
+    def save(self, *args, **kwargs):
+        regenerate = self.image and (not self.pk or not self.thumb or self._image_changed())
+        super().save(*args, **kwargs)
+        if regenerate:
+            from .images import build_variants
+            thumb, large, tn, ln = build_variants(self.image)
+            self.thumb.save(tn, thumb, save=False)
+            self.large.save(ln, large, save=False)
+            super().save(update_fields=["thumb", "large"])
+
+    def _image_changed(self):
+        if not self.pk:
+            return True
+        old = ProductImage.objects.filter(pk=self.pk).values_list("image", flat=True).first()
+        return old != self.image.name
 
 
 class ProductVariant(models.Model):

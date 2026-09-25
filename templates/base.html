@@ -1,10 +1,21 @@
-{% load i18n static humanize %}<!DOCTYPE html>
+{% load i18n static humanize seo %}<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}{{ shop.name }}{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{% trans "O'g'il bolalar kiyimi 0–18 yosh. Toshkent." %}{% endblock %}">
+  {% get_current_language as CUR_LANG %}
+  <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+  {% for code, name in LANGUAGES %}<link rel="alternate" hreflang="{{ code }}" href="{{ request.scheme }}://{{ request.get_host }}{% translate_url code %}">
+  {% endfor %}<link rel="alternate" hreflang="x-default" href="{{ request.scheme }}://{{ request.get_host }}{% translate_url 'uz' %}">
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:locale" content="{% if CUR_LANG == 'ru' %}ru_RU{% else %}uz_UZ{% endif %}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ shop.name }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{% trans "O'g'il bolalar kiyimi 0–18 yosh. Toshkent." %}{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  {% block og_image %}{% endblock %}
   <script src="https://cdn.tailwindcss.com"></script>
   <script>tailwind.config={theme:{extend:{colors:{brand:{DEFAULT:'#E53935',dark:'#C62828',light:'#FDECEA'}}}}}</script>
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
