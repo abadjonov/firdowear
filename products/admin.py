@@ -109,6 +109,6 @@ class ProductAdmin(TabbedTranslationAdmin):
         return sum(v.stock for v in obj.variants.all())
 
 
-admin.site.site_header = "Firdowear — boshqaruv"
-admin.site.site_title = "Firdowear"
+admin.site.site_header = "Firdo — boshqaruv"
+admin.site.site_title = "Firdo"
 admin.site.index_title = "Do'kon boshqaruvi"

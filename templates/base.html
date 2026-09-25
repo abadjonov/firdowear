@@ -6,6 +6,7 @@
   <title>{% block title %}{{ shop.name }}{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{% trans "O'g'il bolalar kiyimi 0–18 yosh. Toshkent." %}{% endblock %}">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{DEFAULT:'#E53935',dark:'#C62828',light:'#FDECEA'}}}}}</script>
   <link rel="stylesheet" href="{% static 'css/site.css' %}">
 </head>
 <body class="bg-stone-50 text-stone-900 antialiased">
@@ -16,11 +17,11 @@
       <button id="menu-btn" class="md:hidden p-2 -ml-2" aria-label="Menu">
         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
       </button>
-      <a href="{% url 'pages:home' %}" class="font-black text-xl tracking-tight">FIRDO<span class="text-sky-600">WEAR</span></a>
+      <a href="{% url 'pages:home' %}" class="text-2xl font-black tracking-tight leading-none">Firdo<span class="text-brand">.</span></a>
 
       <form action="{% url 'products:catalog' %}" class="hidden md:flex flex-1 max-w-md mx-4">
         <input name="q" value="{{ request.GET.q }}" placeholder="{% trans 'Qidirish: jinsi 134, kurtka...' %}"
-               class="w-full rounded-l-lg border border-stone-300 px-3 py-1.5 text-sm focus:outline-none focus:border-sky-500">
+               class="w-full rounded-l-lg border border-stone-300 px-3 py-1.5 text-sm focus:outline-none focus:border-stone-900">
         <button class="rounded-r-lg bg-stone-900 text-white px-3 text-sm">{% trans "Qidir" %}</button>
       </form>
 
@@ -32,7 +33,7 @@
             <button name="language" value="{{ code }}" class="px-2 py-1 rounded {% if code == CUR %}bg-stone-900 text-white{% else %}text-stone-500 hover:bg-stone-100{% endif %}">{{ code|upper }}</button>
           {% endfor %}
         </form>
-        <a href="https://t.me/{{ shop.telegram }}" class="hidden sm:inline-flex items-center gap-1 bg-sky-500 text-white px-3 py-1.5 rounded-lg font-medium">Telegram</a>
+        <a href="https://t.me/{{ shop.telegram }}" class="hidden sm:inline-flex items-center gap-1 bg-stone-900 hover:bg-black text-white px-3 py-1.5 rounded-lg font-medium">Telegram</a>
       </div>
     </div>
 
@@ -85,7 +86,7 @@
 <footer class="mt-12 border-t border-stone-200 bg-white">
   <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 sm:grid-cols-3 text-sm">
     <div>
-      <div class="font-black text-lg">FIRDO<span class="text-sky-600">WEAR</span></div>
+      <div class="font-black text-2xl leading-none">Firdo<span class="text-brand">.</span></div>
       <p class="text-stone-500 mt-1">{% trans "O'g'il bolalar kiyimi va poyabzali, 0–18 yosh." %}</p>
     </div>
     <div>
@@ -103,7 +104,7 @@
   <div class="text-center text-xs text-stone-400 pb-4">© {% now "Y" %} {{ shop.name }}</div>
 </footer>
 
-<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-sky-500 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>
+<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>
 
 <script>
   document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');

@@ -6,8 +6,8 @@
       {% else %}<div class="w-full h-full flex items-center justify-center text-stone-300 text-sm">{% trans "Rasm yo'q" %}</div>{% endif %}
     {% endwith %}
     <div class="absolute top-2 left-2 flex flex-col gap-1">
-      {% if p.is_on_sale %}<span class="bg-red-500 text-white text-[11px] font-bold px-2 py-0.5 rounded">-{{ p.discount_percent }}%</span>{% endif %}
-      {% if p.is_new %}<span class="bg-sky-500 text-white text-[11px] font-bold px-2 py-0.5 rounded">{% trans "Yangi" %}</span>{% endif %}
+      {% if p.is_on_sale %}<span class="bg-brand text-white text-[11px] font-bold px-2 py-0.5 rounded">-{{ p.discount_percent }}%</span>{% endif %}
+      {% if p.is_new %}<span class="bg-stone-900 text-white text-[11px] font-bold px-2 py-0.5 rounded">{% trans "Yangi" %}</span>{% endif %}
     </div>
     {% if not p.in_stock %}<div class="absolute inset-x-0 bottom-0 bg-stone-900/70 text-white text-xs text-center py-1">{% trans "Tugagan" %}</div>{% endif %}
   </div>

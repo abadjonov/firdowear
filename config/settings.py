@@ -96,7 +96,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Do'kon ma'lumotlari (shablonlarda ishlatiladi) ---
 SHOP = {
-    "name": "Firdowear",
+    "name": "Firdo",
     "phone": config("SHOP_PHONE", default="+998 90 000 00 00"),
     "telegram": config("SHOP_TELEGRAM", default="firdowear"),
     "instagram": config("SHOP_INSTAGRAM", default="firdowear"),
