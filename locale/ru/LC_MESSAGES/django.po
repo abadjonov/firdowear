@@ -1,7 +1,8 @@
+#
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid "Alohida narx"
@@ -241,8 +242,12 @@ msgstr "Заказать через Telegram"
 msgid "Tugagan"
 msgstr "Нет в наличии"
 
-msgid "Turli brendlar, haqiqiy qoldiq. Saytda tanlang, Telegramda buyurtma bering yoki do'konga keling."
-msgstr "Разные бренды, реальные остатки. Выбирайте на сайте, заказывайте в Telegram или приходите в магазин."
+msgid ""
+"Turli brendlar, haqiqiy qoldiq. Saytda tanlang, Telegramda buyurtma bering "
+"yoki do'konga keling."
+msgstr ""
+"Разные бренды, реальные остатки. Выбирайте на сайте, заказывайте в Telegram "
+"или приходите в магазин."
 
 msgid "Variant"
 msgstr "Вариант"
@@ -250,7 +255,8 @@ msgstr "Вариант"
 msgid "Variantlar"
 msgstr "Варианты"
 
-msgid "Xarita: .env faylida SHOP_MAP_EMBED ga Yandex/Google iframe kodini qo'ying."
+msgid ""
+"Xarita: .env faylida SHOP_MAP_EMBED ga Yandex/Google iframe kodini qo'ying."
 msgstr "Карта: добавьте iframe Яндекс/Google в SHOP_MAP_EMBED в файле .env."
 
 msgid "Yangi"
@@ -309,3 +315,129 @@ msgstr "Узбекский"
 
 msgid "Русский"
 msgstr "Русский"
+
+msgid "Savat"
+msgstr "Корзина"
+
+msgid "O'chirish"
+msgstr "Удалить"
+
+msgid "Omborda faqat"
+msgstr "В наличии только"
+
+msgid "ta"
+msgstr "шт."
+
+msgid "Sonini yangilash"
+msgstr "Обновить количество"
+
+msgid "Jami"
+msgstr "Итого"
+
+msgid "Buyurtma berish"
+msgstr "Оформить заказ"
+
+msgid "To'lov do'konda yoki qabul qilganda. Biz sizga qo'ng'iroq qilamiz."
+msgstr "Оплата в магазине или при получении. Мы вам перезвоним."
+
+msgid "Xaridni davom ettirish"
+msgstr "Продолжить покупки"
+
+msgid "Savat bo'sh"
+msgstr "Корзина пуста"
+
+msgid "Katalogga o'tish"
+msgstr "Перейти в каталог"
+
+msgid "Buyurtmani tasdiqlash"
+msgstr "Подтвердить заказ"
+
+msgid ""
+"Buyurtma bizga darhol Telegram orqali keladi. Tez orada qo'ng'iroq qilamiz."
+msgstr "Заказ сразу приходит нам в Telegram. Мы скоро перезвоним."
+
+msgid "Rahmat!"
+msgstr "Спасибо!"
+
+msgid "Buyurtma qabul qilindi"
+msgstr "Заказ принят"
+
+msgid "Savatga o'tish"
+msgstr "В корзину"
+
+msgid "O'lchamni tanlang"
+msgstr "Выберите размер"
+
+msgid "Savatga qo'shish"
+msgstr "В корзину"
+
+msgid "Telegram orqali so'rash"
+msgstr "Спросить в Telegram"
+
+msgid "Bu o'lcham tugagan"
+msgstr "Этого размера нет в наличии"
+
+#, python-format
+msgid "Savatga qo'shildi: %(name)s"
+msgstr "Добавлено в корзину: %(name)s"
+
+msgid "Ba'zi mahsulotlar yetarli emas, savatni tekshiring"
+msgstr "Некоторых товаров недостаточно, проверьте корзину"
+
+msgid "Ismingiz"
+msgstr "Ваше имя"
+
+msgid "Tuman, ko'cha, uy"
+msgstr "Район, улица, дом"
+
+msgid "Masalan: 16:00 dan keyin qo'ng'iroq qiling"
+msgstr "Например: звоните после 16:00"
+
+msgid "Telefon raqamini +998 XX XXX XX XX ko'rinishida kiriting"
+msgstr "Введите номер в формате +998 XX XXX XX XX"
+
+msgid "Yetkazib berish uchun manzil kerak"
+msgstr "Для доставки нужен адрес"
+
+msgid "Ism"
+msgstr "Имя"
+
+msgid "Yetkazish"
+msgstr "Доставка"
+
+msgid "Izoh"
+msgstr "Комментарий"
+
+msgid "Holat"
+msgstr "Статус"
+
+msgid "Do'kondan olib ketish"
+msgstr "Самовывоз из магазина"
+
+msgid "Yetkazib berish"
+msgstr "Доставка"
+
+msgid "Tasdiqlandi"
+msgstr "Подтверждён"
+
+msgid "Tayyor / yetkazilmoqda"
+msgstr "Готов / доставляется"
+
+msgid "Bajarildi"
+msgstr "Выполнен"
+
+msgid "Bekor qilindi"
+msgstr "Отменён"
+
+msgid "Buyurtma"
+msgstr "Заказ"
+
+msgid "Buyurtmalar"
+msgstr "Заказы"
+
+msgid "o'g'il bolalar uchun"
+msgstr "для мальчиков"
+
+#, python-format
+msgid "Tez orada %(phone)s raqamiga qo'ng'iroq qilamiz."
+msgstr "Скоро мы позвоним на номер %(phone)s."

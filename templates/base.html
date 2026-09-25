@@ -44,7 +44,10 @@
             <button name="language" value="{{ code }}" class="px-2 py-1 rounded {% if code == CUR %}bg-stone-900 text-white{% else %}text-stone-500 hover:bg-stone-100{% endif %}">{{ code|upper }}</button>
           {% endfor %}
         </form>
-        <a href="https://t.me/{{ shop.telegram }}" class="hidden sm:inline-flex items-center gap-1 bg-stone-900 hover:bg-black text-white px-3 py-1.5 rounded-lg font-medium">Telegram</a>
+        <a href="{% url 'orders:cart' %}" class="relative p-2" aria-label="{% trans 'Savat' %}">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M6 6L5 3H2"/></svg>
+          {% if cart_count %}<span class="absolute -top-0.5 -right-0.5 bg-brand text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">{{ cart_count }}</span>{% endif %}
+        </a>
       </div>
     </div>
 
@@ -91,6 +94,7 @@
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-5">
+  {% for m in messages %}<div class="mb-4 rounded-xl px-4 py-3 text-sm {% if m.tags == 'error' %}bg-brand-light text-brand-dark{% else %}bg-stone-900 text-white{% endif %}">{{ m }}{% if m.tags == 'success' %} · <a href="{% url 'orders:cart' %}" class="underline">{% trans "Savatga o'tish" %}</a>{% endif %}</div>{% endfor %}
   {% block content %}{% endblock %}
 </main>
 
@@ -115,7 +119,8 @@
   <div class="text-center text-xs text-stone-400 pb-4">© {% now "Y" %} {{ shop.name }}</div>
 </footer>
 
-<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>
+{% if cart_count %}<a href="{% url 'orders:cart' %}" class="sm:hidden fixed bottom-4 right-4 bg-brand text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">{% trans "Savat" %} · {{ cart_count }}</a>
+{% else %}<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>{% endif %}
 
 <script>
   document.getElementById('menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');

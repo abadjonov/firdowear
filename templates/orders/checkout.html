@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% load i18n humanize %}
+{% block title %}{% trans "Buyurtma berish" %} — {{ shop.name }}{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">{% trans "Buyurtma berish" %}</h1>
+<form method="post" class="grid md:grid-cols-[1fr_320px] gap-6">{% csrf_token %}
+  <div class="bg-white rounded-xl border border-stone-200 p-4 sm:p-6 space-y-4">
+    {% if form.non_field_errors %}<div class="text-brand text-sm">{{ form.non_field_errors }}</div>{% endif %}
+    {% for f in form %}
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ f.label }}{% if f.field.required %} <span class="text-brand">*</span>{% endif %}</label>
+        {% if f.name == 'delivery' %}
+          <div class="grid grid-cols-2 gap-2">
+            {% for choice in f %}
+              <label class="border rounded-lg px-3 py-2.5 text-sm cursor-pointer has-[:checked]:border-stone-900 has-[:checked]:bg-stone-50 flex items-center gap-2">{{ choice.tag }} {{ choice.choice_label }}</label>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ f }}
+        {% endif %}
+        {% if f.errors %}<div class="text-brand text-xs mt-1">{{ f.errors.0 }}</div>{% endif %}
+      </div>
+    {% endfor %}
+    <button class="w-full bg-stone-900 hover:bg-black text-white rounded-xl py-3.5 font-semibold text-lg">{% trans "Buyurtmani tasdiqlash" %}</button>
+    <p class="text-xs text-stone-500 text-center">{% trans "Buyurtma bizga darhol Telegram orqali keladi. Tez orada qo'ng'iroq qilamiz." %}</p>
+  </div>
+  <aside class="bg-white rounded-xl border border-stone-200 p-4 h-fit space-y-2 text-sm">
+    {% for i in items %}<div class="flex justify-between gap-2"><span class="text-stone-600 line-clamp-1">{{ i.variant.product.name }}, {{ i.variant.size.label }} × {{ i.qty }}</span><span class="shrink-0">{{ i.subtotal|intcomma }}</span></div>{% endfor %}
+    <div class="border-t pt-2 flex justify-between text-base"><span>{% trans "Jami" %}</span><b>{{ total|intcomma }} {% trans "so'm" %}</b></div>
+  </aside>
+</form>
+<style>form input[type=text],form input[type=tel],form textarea,form select{width:100%;border:1px solid #d6d3d1;border-radius:.5rem;padding:.6rem .75rem}form input:focus,form textarea:focus{outline:none;border-color:#1c1917}</style>
+{% endblock %}

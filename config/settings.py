@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "products",
     "pages",
+    "orders",
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "products.context_processors.catalog_menu",
                 "pages.context_processors.shop_info",
+                "orders.context_processors.cart_count",
             ],
         },
     },
@@ -98,6 +100,10 @@ SITE_ID = 1
 SITE_URL = config("SITE_URL", default="")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# --- Telegram bot: buyurtma kelganda xabar ---
+TELEGRAM_BOT_TOKEN = config("TELEGRAM_BOT_TOKEN", default="")
+TELEGRAM_CHAT_ID = config("TELEGRAM_CHAT_ID", default="")
 
 # --- Do'kon ma'lumotlari (shablonlarda ishlatiladi) ---
 SHOP = {

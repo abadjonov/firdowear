@@ -28,3 +28,22 @@ Batafsil reja: [PLAN.md](PLAN.md).
 ## Kunlik ish (admin)
 
 `/admin/` → Mahsulotlar → mahsulot → pastdagi **Variantlar** jadvalida `Qoldiq` ni o'zgartiring. Tugaganini o'chirmang — `0` qo'ying.
+
+## Telegram botga buyurtma xabari (3-bosqich)
+
+1. Telegramda **@BotFather** → `/newbot` → token oling.
+2. Yaratilgan botga o'z akkauntingizdan `/start` yozing (yoki botni do'kon guruhiga qo'shing).
+3. Brauzerda oching: `https://api.telegram.org/bot<TOKEN>/getUpdates` → `"chat":{"id": ...}` qiymatini oling.
+4. `.env` ga yozing:
+   ```
+   TELEGRAM_BOT_TOKEN=123456:ABC...
+   TELEGRAM_CHAT_ID=987654321
+   ```
+5. Serverni qayta ishga tushiring. Har bir buyurtma darhol shu chatga keladi (mahsulot, o'lcham, rang, telefon, admin havolasi).
+
+Token bo'lmasa sayt baribir ishlaydi — buyurtma admin panelda (`/admin/orders/order/`) ko'rinadi, faqat xabar yuborilmaydi.
+
+## Buyurtma oqimi
+
+Mahsulot → rang → o'lcham → **Savatga** → Savat → Ism/telefon/yetkazish → **Tasdiqlash** → Telegram xabar + admin.
+Buyurtma berilganda variant qoldig'i avtomatik kamayadi. Bekor qilsangiz, admin'da «omborga qaytarish» amali bor.
