@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Sahifa topilmadi" %} — {{ shop.name }}{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto text-center py-12">
+  <div class="text-7xl font-black tracking-tight">4<span class="text-brand">0</span>4</div>
+  <h1 class="text-2xl font-bold mt-3">{% trans "Sahifa topilmadi" %}</h1>
+  <p class="text-stone-600 mt-2">{% trans "Bu sahifa o'chirilgan yoki manzil noto'g'ri. Katalogdan kerakli kiyimni toping." %}</p>
+  <div class="mt-6 flex flex-wrap gap-3 justify-center">
+    <a href="{% url 'pages:home' %}" class="bg-stone-900 text-white px-6 py-2.5 rounded-xl">{% trans "Bosh sahifa" %}</a>
+    <a href="{% url 'products:catalog' %}" class="bg-brand text-white px-6 py-2.5 rounded-xl">{% trans "Katalog" %}</a>
+  </div>
+</div>
+{% endblock %}

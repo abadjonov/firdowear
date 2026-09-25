@@ -12,12 +12,17 @@ from products.sitemaps import SITEMAPS
 def robots(request):
     host = request.build_absolute_uri("/").rstrip("/")
     return HttpResponse(
-        f"User-agent: *\nDisallow: /admin/\nDisallow: /i18n/\nDisallow: /cart/\nSitemap: {host}/sitemap.xml\n",
+        f"User-agent: *\nDisallow: /admin/\nDisallow: /i18n/\nDisallow: /cart/\nDisallow: /*/favorites/\nDisallow: /*/orders/track/\nSitemap: {host}/sitemap.xml\n",
         content_type="text/plain",
     )
 
 
+def healthz(request):
+    return HttpResponse("ok", content_type="text/plain")
+
+
 urlpatterns = [
+    path("healthz", healthz),
     path("admin/", admin.site.urls),
     path("i18n/", include("django.conf.urls.i18n")),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),

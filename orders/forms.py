@@ -31,3 +31,21 @@ class CheckoutForm(forms.ModelForm):
         if data.get("delivery") == Order.Delivery.COURIER and not data.get("address"):
             self.add_error("address", _("Yetkazib berish uchun manzil kerak"))
         return data
+
+
+class TrackForm(forms.Form):
+    number = forms.IntegerField(
+        label=_("Buyurtma raqami"), min_value=1,
+        widget=forms.NumberInput(attrs={"placeholder": "123", "inputmode": "numeric"}),
+    )
+    phone = forms.CharField(
+        label=_("Telefon"), max_length=20,
+        widget=forms.TextInput(attrs={"placeholder": "+998 90 123 45 67", "inputmode": "tel", "autocomplete": "tel"}),
+    )
+
+
+    def clean_phone(self):
+        digits = re.sub(r"\D", "", self.cleaned_data["phone"])
+        if len(digits) < 9:
+            raise forms.ValidationError(_("Telefon raqamini to'liq kiriting"))
+        return digits
