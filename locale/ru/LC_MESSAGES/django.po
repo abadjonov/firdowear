@@ -65,8 +65,17 @@ msgstr "Активен"
 msgid "Faqat"
 msgstr "Осталось"
 
-msgid "Faqat eng pastki (2-daraja) kategoriya"
-msgstr "Только нижняя (2-й уровень) категория"
+msgid "Faqat ichki kategoriyasi yo'q kategoriya (1- yoki 2-daraja)"
+msgstr "Только категория без подкатегорий (1-й или 2-й уровень)"
+
+msgid "Kategoriya o'ziga o'zi ota bo'la olmaydi."
+msgstr "Категория не может быть родительской для самой себя."
+
+msgid "Ota kategoriya faqat 1-darajali bo'lishi mumkin."
+msgstr "Родительская категория должна быть категорией 1-го уровня."
+
+msgid "Ichki kategoriyalari bor kategoriyani boshqa kategoriya ostiga ko'chirib bo'lmaydi."
+msgstr "Категорию с подкатегориями нельзя переместить внутрь другой категории."
 
 msgid "Faqat mavjud"
 msgstr "Только в наличии"

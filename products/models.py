@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Min, Q
 from django.urls import reverse
@@ -84,7 +85,22 @@ class Category(models.Model):
         verbose_name_plural = _("Kategoriyalar")
 
     def __str__(self):
-        return f"{self.parent} → {self.name}" if self.parent else self.name
+        # Never recurse through parent.__str__: legacy data may contain cycles.
+        return f"{self.parent.name} → {self.name}" if self.parent_id else self.name
+
+    def clean(self):
+        super().clean()
+        if self.parent_id is None:
+            return
+        if self.parent_id == self.pk:
+            raise ValidationError({"parent": _("Kategoriya o'ziga o'zi ota bo'la olmaydi.")})
+        # Query the stored relationship, not a possibly stale cached parent.
+        if Category.objects.filter(pk=self.parent_id, parent__isnull=False).exists():
+            raise ValidationError({"parent": _("Ota kategoriya faqat 1-darajali bo'lishi mumkin.")})
+        if self.pk and self.children.exists():
+            raise ValidationError({
+                "parent": _("Ichki kategoriyalari bor kategoriyani boshqa kategoriya ostiga ko'chirib bo'lmaydi.")
+            })
 
     def get_absolute_url(self):
         return reverse("products:category", args=[self.slug])
@@ -167,8 +183,8 @@ class Product(TimeStamped):
     slug = models.SlugField(unique=True, max_length=220)
     category = models.ForeignKey(
         Category, on_delete=models.PROTECT, related_name="products",
-        limit_choices_to={"parent__isnull": False}, verbose_name=_("Kategoriya"),
-        help_text=_("Faqat eng pastki (2-daraja) kategoriya"),
+        limit_choices_to={"children__isnull": True}, verbose_name=_("Kategoriya"),
+        help_text=_("Faqat ichki kategoriyasi yo'q kategoriya (1- yoki 2-daraja)"),
     )
     brand = models.ForeignKey(
         Brand, null=True, blank=True, on_delete=models.SET_NULL,
