@@ -25,6 +25,15 @@ class CategoryAdmin(TabbedTranslationAdmin):
     list_editable = ("is_active", "sort_order")
     prepopulated_fields = {"slug": ("name",)}
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if "parent" in form.base_fields:
+            parents = Category.objects.filter(parent__isnull=True)
+            if obj is not None:
+                parents = parents.exclude(pk=obj.pk)
+            form.base_fields["parent"].queryset = parents
+        return form
+
 
 class SizeInline(TranslationTabularInline):
     model = Size
