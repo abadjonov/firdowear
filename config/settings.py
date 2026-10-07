@@ -14,6 +14,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv(
 CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
 INSTALLED_APPS = [
+    "jazzmin",
     "modeltranslation",  # admin'dan oldin turishi shart
     "django.contrib.admin",
     "django.contrib.auth",
@@ -28,6 +29,24 @@ INSTALLED_APPS = [
     "pages",
     "orders",
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Firdo Admin",
+    "site_header": "Firdo",
+    "site_brand": "Firdo",
+    "welcome_sign": "Firdo boshqaruv paneliga xush kelibsiz",
+    "copyright": "Firdo",
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "changeform_format": "horizontal_tabs",
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.group": "fas fa-users",
+        "products": "fas fa-box-open",
+        "pages": "fas fa-file-alt",
+        "orders": "fas fa-shopping-bag",
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
