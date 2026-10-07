@@ -1,7 +1,9 @@
 from pathlib import Path
+from urllib.parse import urlparse
 
 import dj_database_url
 from decouple import Csv, config
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,10 +66,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# DATABASE_URL: postgres://user:pass@host:5432/db  yoki bo'sh -> SQLite
+# PostgreSQL majburiy: SQLite fallback ataylab o'chirilgan.
+DATABASE_URL = config("DATABASE_URL", default="").strip()
+if not DATABASE_URL:
+    raise ImproperlyConfigured(
+        "DATABASE_URL sozlanmagan. PostgreSQL ulanish URL manzilini kiriting."
+    )
+
+DATABASE_SCHEME = urlparse(DATABASE_URL).scheme.lower()
+if DATABASE_SCHEME not in {"postgres", "postgresql"}:
+    raise ImproperlyConfigured(
+        "Faqat PostgreSQL qo'llab-quvvatlanadi. DATABASE_URL postgres:// yoki "
+        "postgresql:// bilan boshlanishi kerak."
+    )
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    "default": dj_database_url.parse(
+        DATABASE_URL,
         conn_max_age=config("DB_CONN_MAX_AGE", default=60, cast=int),
         conn_health_checks=True,
     )

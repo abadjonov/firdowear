@@ -37,8 +37,9 @@ TELEGRAM_BOT_TOKEN=...
 TELEGRAM_CHAT_ID=...
 ```
 
-`DATABASE_URL` ni yozish shart emas — compose uni `db` servisiga avtomatik o'rnatadi.
-(Lokalda `DATABASE_URL` bo'sh bo'lsa SQLite ishlatiladi.)
+`DATABASE_URL` ni qo'lda yozish shart emas — compose uni `db` servisiga avtomatik o'rnatadi.
+Django faqat PostgreSQL bilan ishlaydi; `DATABASE_URL` bo'lmasa yoki SQLite URL berilsa, dastur ishga tushmaydi.
+Lokal ishga tushirishda `.env` ichida ishlayotgan PostgreSQL serveringizga tegishli `DATABASE_URL` bo'lishi shart.
 
 ## 3. SSL va birinchi ishga tushirish
 
