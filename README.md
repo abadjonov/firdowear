@@ -43,6 +43,30 @@ Batafsil reja: [PLAN.md](PLAN.md).
 
 Token bo'lmasa sayt baribir ishlaydi — buyurtma admin panelda (`/admin/orders/order/`) ko'rinadi, faqat xabar yuborilmaydi.
 
+### Xabar kelmayaptimi? Tekshirish
+
+```bash
+python manage.py telegram_check            # sozlama + token + sinov xabari
+docker compose exec web python manage.py telegram_check   # Docker'da
+python manage.py telegram_check --order 12 # 12-buyurtma xabarini qayta yuborish
+```
+
+Buyurtmalar ro'yxatida (`/admin/orders/order/`) **«Telegramga yuborildi»** ustuni bor:
+`✗` bo'lsa xabar ketmagan. Bir nechta buyurtmani belgilab
+**«Telegram xabarini qayta yuborish»** amalini bajarsangiz kifoya.
+
+Sabablari bo'yicha tartib:
+
+| Alomat | Sabab | Yechim |
+|---|---|---|
+| Logda `TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID sozlanmagan` | `.env` to'ldirilmagan yoki servis qayta ishga tushmagan | `.env` ni yozing → `docker compose up -d` |
+| `Unauthorized` (401) | token noto'g'ri/ketirilgan | @BotFather'dan yangi token |
+| `chat not found` / `bot was kicked` (400/403) | botga `/start` yozilmagan, chat_id xato, bot guruhdan chiqarilgan | `getUpdates` dan id oling; guruh uchun id `-100...` |
+| `can't parse entities` (400) | mijoz matnida `<`, `>`, `&` bor edi | tuzatilgan: matn escape qilinadi, baribir xato bo'lsa oddiy matnda ketadi |
+| `tarmoq xatosi` | serverdan `api.telegram.org` ga chiqish yo'q | firewall/DNS/proksini tekshiring |
+
+`TELEGRAM_CHAT_ID` va token'ni `.env` da **qo'shtirnoqsiz** yozing: `TELEGRAM_CHAT_ID=-1001234567890`.
+
 ## Buyurtma oqimi
 
 Mahsulot → rang → o'lcham → **Savatga** → Savat → Ism/telefon/yetkazish → **Tasdiqlash** → Telegram xabar + admin.

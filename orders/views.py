@@ -12,7 +12,7 @@ from products.models import Product, ProductVariant
 from .cart import Cart
 from .forms import CheckoutForm, TrackForm
 from .models import Order, OrderItem
-from .telegram import order_message, send_message
+from .telegram import notify_order
 from .tracking import ORDERS_KEY, get_favorites, normalize_phone, remember_order, toggle_favorite
 
 
@@ -71,8 +71,7 @@ def checkout(request):
                 ProductVariant.objects.filter(pk=v.pk).update(stock=max(v.stock - i["qty"], 0))
             order.recalc()
         admin_url = request.build_absolute_uri(reverse("admin:orders_order_change", args=[order.pk]))
-        order.telegram_sent = send_message(order_message(order, admin_url))
-        order.save(update_fields=["telegram_sent"])
+        notify_order(order, admin_url)
         cart.clear()
         request.session["last_order"] = order.pk
         remember_order(request.session, order.pk)
