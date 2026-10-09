@@ -1,0 +1,21 @@
+[project]
+name = "firdowear"
+version = "0.1.0"
+description = "Firdowear project"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "asgiref==3.12.1",
+    "dj-database-url==2.3.0",
+    "django==5.1.15",
+    "django-modeltranslation==0.20.6",
+    "django-unfold>=0.91.0",
+    "gunicorn==23.0.0",
+    "pillow==12.3.0",
+    "polib==1.2.0",
+    "psycopg[binary]==3.2.10",
+    "python-decouple==3.8",
+    "sqlparse==0.6.0",
+    "typing-extensions==4.16.0",
+    "whitenoise==6.9.0",
+]
