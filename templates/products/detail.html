@@ -89,10 +89,14 @@
         <span data-empty>{% trans "O'lchamni tanlang" %}</span><span data-ready class="hidden">{% trans "Savatga qo'shish" %}</span>
       </button>
     </form>
-    <a id="order-btn" href="https://t.me/{{ shop.telegram }}" target="_blank"
+    <a id="order-btn" href="{{ shop.telegram_bot_url }}" target="_blank" rel="noopener"
        class="mt-2 flex items-center justify-center gap-2 w-full border-2 border-stone-900 rounded-xl py-3 font-semibold">
       {% trans "Telegram orqali so'rash" %}
     </a>
+    {% if shop.telegram_url and shop.telegram_url != shop.telegram_bot_url %}
+    <a href="{{ shop.telegram_url }}" target="_blank" rel="noopener"
+       class="mt-2 block text-center text-sm text-stone-500 hover:text-stone-900">{% trans "Telegram kanal (katalog)" %}: @{{ shop.telegram }}</a>
+    {% endif %}
     <a href="tel:{{ shop.phone|cut:' ' }}" class="mt-2 block text-center border border-stone-300 rounded-xl py-3 font-medium">{% trans "Qo'ng'iroq" %}: {{ shop.phone }}</a>
     <p class="text-xs text-stone-500 mt-2 text-center">{% trans "Yoki do'konga keling" %}: {{ shop.address }}</p>
 
@@ -119,7 +123,7 @@
 {% block scripts %}
 <script>
 (function () {
-  const tg = "https://t.me/{{ shop.telegram }}";
+  const tg = "{{ shop.telegram_bot_url }}";
   const product = "{{ product.name|escapejs }}";
   const url = location.href;
   const colorBtns = [...document.querySelectorAll('.color-btn')];
