@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.html import format_html
 
 from .models import Order, OrderItem
+from .telegram import notify_order
 
 
 class OrderItemInline(admin.TabularInline):
@@ -28,7 +30,7 @@ class OrderAdmin(admin.ModelAdmin):
         (None, {"fields": ("status", "name", "phone", "delivery", "address", "comment")}),
         ("Ichki", {"fields": ("admin_note", "total", "language", "telegram_sent", "created_at", "updated_at")}),
     )
-    actions = ["restock_cancelled"]
+    actions = ["restock_cancelled", "resend_telegram"]
 
     @admin.display(description="Telefon")
     def phone_link(self, obj):
@@ -43,3 +45,18 @@ class OrderAdmin(admin.ModelAdmin):
                 i.variant.save(update_fields=["stock"])
                 n += 1
         self.message_user(request, f"{n} ta qator omborga qaytarildi")
+
+    @admin.action(description="Telegram xabarini qayta yuborish")
+    def resend_telegram(self, request, queryset):
+        """Xabari yetib bormagan (telegram_sent=False) buyurtmalar uchun."""
+        total, ok = 0, 0
+        for order in queryset.prefetch_related("items"):
+            total += 1
+            admin_url = request.build_absolute_uri(reverse("admin:orders_order_change", args=[order.pk]))
+            if notify_order(order, admin_url):
+                ok += 1
+        self.message_user(
+            request,
+            f"{ok}/{total} ta xabar Telegramga yuborildi" if ok else "Birorta xabar yuborilmadi — logni tekshiring",
+            level="info" if ok else "error",
+        )

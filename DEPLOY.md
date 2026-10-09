@@ -58,6 +58,7 @@ Migratsiyalar `web` konteyneri ishga tushganda avtomatik bajariladi.
 ```bash
 docker compose exec web python manage.py createsuperuser
 docker compose exec web python manage.py seed_catalog     # kategoriyalar, o'lchamlar, ranglar
+docker compose exec web python manage.py telegram_check   # Telegram botni tekshirish + sinov xabari
 ```
 
 Admin: `https://firdo.uz/admin/`
@@ -92,6 +93,8 @@ Cron misoli (har kuni 03:00): `0 3 * * * cd /home/USER/firdowear && docker compo
 | Django shell | `docker compose exec web python manage.py shell` |
 | Tarjimalarni yangilash | `docker compose exec web python manage.py compilemessages` |
 | Health-check | `curl https://firdo.uz/healthz` → `ok` |
+| Telegram tekshiruvi | `docker compose exec web python manage.py telegram_check` |
+| Buyurtma xabarini qayta yuborish | `docker compose exec web python manage.py telegram_check --order 12` |
 
 ## Xavfsizlik (DEBUG=False bo'lganda avtomatik)
 
