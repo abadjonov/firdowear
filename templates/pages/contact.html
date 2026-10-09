@@ -7,8 +7,12 @@
     <div><div class="text-xs uppercase text-stone-400">{% trans "Manzil" %}</div><div class="font-medium">{{ shop.address }}</div></div>
     <div><div class="text-xs uppercase text-stone-400">{% trans "Ish vaqti" %}</div><div class="font-medium">{{ shop.hours }}</div></div>
     <div><div class="text-xs uppercase text-stone-400">{% trans "Telefon" %}</div><a href="tel:{{ shop.phone|cut:' ' }}" class="font-medium text-brand">{{ shop.phone }}</a></div>
+    {% if shop.telegram_url %}
+    <div><div class="text-xs uppercase text-stone-400">{% trans "Telegram kanal (katalog)" %}</div>
+      <a href="{{ shop.telegram_url }}" target="_blank" rel="noopener" class="font-medium">@{{ shop.telegram }}</a></div>
+    {% endif %}
     <div class="flex gap-2 pt-2">
-      <a href="https://t.me/{{ shop.telegram }}" class="flex-1 text-center bg-stone-900 text-white rounded-xl py-2.5 font-medium">Telegram</a>
+      <a href="{{ shop.telegram_bot_url }}" target="_blank" rel="noopener" class="flex-1 text-center bg-stone-900 text-white rounded-xl py-2.5 font-medium">{% trans "Telegram orqali yozish" %}</a>
       <a href="https://instagram.com/{{ shop.instagram }}" class="flex-1 text-center bg-white border-2 border-stone-900 text-stone-900 rounded-xl py-2.5 font-medium">Instagram</a>
     </div>
   </div>

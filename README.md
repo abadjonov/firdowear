@@ -29,9 +29,40 @@ Batafsil reja: [PLAN.md](PLAN.md).
 
 `/admin/` → Mahsulotlar → mahsulot → pastdagi **Variantlar** jadvalida `Qoldiq` ni o'zgartiring. Tugaganini o'chirmang — `0` qo'ying.
 
+## Telegram: kanal (katalog) va aloqa boti
+
+Saytda Telegramning **ikki xil** manzili bor, ular aralashmaydi:
+
+| Sozlama | Bu nima | Qayerda chiqadi |
+|---|---|---|
+| `SHOP_TELEGRAM` | **Kanal** — katalog, yangi kelganlar | Hamma sahifaning footer'ida, «Manzil va aloqa» va mahsulot sahifasida «Telegram kanal (katalog)» |
+| `SHOP_TELEGRAM_BOT` | **Bot** — mijoz yozadigan aloqa boti | «Telegram orqali so'rash» tugmasi, «Manzil va aloqa»dagi tugma, mobil pastki tugma |
+| `TELEGRAM_BOT_TOKEN` | Shu botning tokeni | Buyurtma xabari operator chatiga (`TELEGRAM_CHAT_ID`) shu orqali ketadi |
+
+```ini
+SHOP_TELEGRAM=firdowear            # kanal — katalog
+SHOP_TELEGRAM_BOT=firdowear_bot    # aloqa boti, @ siz
+TELEGRAM_BOT_TOKEN=123456:ABC...   # SHOP_TELEGRAM_BOT dagi botniki
+TELEGRAM_CHAT_ID=-1001234567890    # xabar boradigan chat/guruh
+```
+
+Ikkala `SHOP_TELEGRAM*` ham `@` siz yoziladi; `@firdowear` yoki `https://t.me/firdowear`
+yozilsa ham to'g'ri tushuniladi. Agar `SHOP_TELEGRAM_BOT` bo'sh qoldirilsa, eski holat
+saqlanadi — hamma joyda kanal ishlatiladi.
+
+Token ochiq qolgan bo'lsa: **@BotFather → `/revoke`** → yangi token oling.
+
+Serverda:
+
+```bash
+git pull && docker compose up -d --build web
+docker compose exec web python manage.py telegram_check
+```
+
 ## Telegram botga buyurtma xabari (3-bosqich)
 
-1. Telegramda **@BotFather** → `/newbot` → token oling.
+1. Telegramda **@BotFather** → `/newbot` → token oling. Botning username'ini (`@` siz)
+   `.env` dagi `SHOP_TELEGRAM_BOT` ga yozing — «Telegram orqali so'rash» shu botga boradi.
 2. Yaratilgan botga o'z akkauntingizdan `/start` yozing (yoki botni do'kon guruhiga qo'shing).
 3. Brauzerda oching: `https://api.telegram.org/bot<TOKEN>/getUpdates` → `"chat":{"id": ...}` qiymatini oling.
 4. `.env` ga yozing:

@@ -120,7 +120,8 @@
     </div>
     <div>
       <div class="font-semibold mb-1">{% trans "Ijtimoiy tarmoqlar" %}</div>
-      <a href="https://t.me/{{ shop.telegram }}" class="block">Telegram: @{{ shop.telegram }}</a>
+      {% if shop.telegram_url %}<a href="{{ shop.telegram_url }}" target="_blank" rel="noopener" class="block">{% trans "Telegram kanal (katalog)" %}: @{{ shop.telegram }}</a>{% endif %}
+      {% if shop.telegram_bot_url and shop.telegram_bot_url != shop.telegram_url %}<a href="{{ shop.telegram_bot_url }}" target="_blank" rel="noopener" class="block">{% trans "Telegram bot (aloqa)" %}: @{{ shop.telegram_bot }}</a>{% endif %}
       <a href="https://instagram.com/{{ shop.instagram }}" class="block">Instagram: @{{ shop.instagram }}</a>
     </div>
   </div>
@@ -128,7 +129,7 @@
 </footer>
 
 {% if cart_count %}<a href="{% url 'orders:cart' %}" class="sm:hidden fixed bottom-4 right-4 bg-brand text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">{% trans "Savat" %} · {{ cart_count }}</a>
-{% else %}<a href="https://t.me/{{ shop.telegram }}" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>{% endif %}
+{% elif shop.telegram_bot_url %}<a href="{{ shop.telegram_bot_url }}" target="_blank" rel="noopener" class="sm:hidden fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-3 rounded-full shadow-lg font-semibold z-20">Telegram</a>{% endif %}
 
 <script>
   // Sevimlilar: AJAX yurakcha

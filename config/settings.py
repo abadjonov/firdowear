@@ -139,7 +139,11 @@ TELEGRAM_CHAT_ID = config("TELEGRAM_CHAT_ID", default="")
 SHOP = {
     "name": "Firdo",
     "phone": config("SHOP_PHONE", default="+998 90 000 00 00"),
+    # Telegram kanali (katalog): butun sayt bo'ylab alohida ko'rsatiladi.
     "telegram": config("SHOP_TELEGRAM", default="firdowear"),
+    # Aloqa boti: «Telegram orqali so'rash» shu botga boradi.
+    # Bo'sh bo'lsa, kanal ishlatiladi (eski sozlashlar buzilmaydi).
+    "telegram_bot": config("SHOP_TELEGRAM_BOT", default=""),
     "instagram": config("SHOP_INSTAGRAM", default="firdowear"),
     "address_uz": config("SHOP_ADDRESS_UZ", default="Toshkent shahri"),
     "address_ru": config("SHOP_ADDRESS_RU", default="г. Ташкент"),

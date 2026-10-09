@@ -33,7 +33,9 @@ SITE_URL=https://firdo.uz
 DOMAIN=firdo.uz
 LETSENCRYPT_EMAIL=siz@example.com
 POSTGRES_PASSWORD=<kuchli-parol>
-TELEGRAM_BOT_TOKEN=...
+SHOP_TELEGRAM=firdowear          # kanal — katalog
+SHOP_TELEGRAM_BOT=firdowear_bot  # aloqa boti, @ siz
+TELEGRAM_BOT_TOKEN=...           # SHOP_TELEGRAM_BOT dagi botniki
 TELEGRAM_CHAT_ID=...
 ```
 

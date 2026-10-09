@@ -245,8 +245,17 @@ msgstr "Описание"
 msgid "Telefon"
 msgstr "Телефон"
 
+msgid "Telegram bot (aloqa)"
+msgstr "Telegram-бот (связь)"
+
+msgid "Telegram kanal (katalog)"
+msgstr "Telegram-канал (каталог)"
+
 msgid "Telegram orqali buyurtma"
 msgstr "Заказать через Telegram"
+
+msgid "Telegram orqali yozish"
+msgstr "Написать в Telegram"
 
 msgid "Tugagan"
 msgstr "Нет в наличии"
