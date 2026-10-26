@@ -1,0 +1,139 @@
+{% extends 'admin/base.html' %}
+{% load i18n unfold %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+    <div class="space-y-6 mb-8">
+        <!-- KPI ko'rsatkichlar kartalari -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Yangi buyurtmalar -->
+            {% component "unfold/components/card.html" with href="/admin/orders/order/?status=new" icon="notifications_active" %}
+                <span class="text-xs uppercase font-semibold tracking-wider text-font-subtle dark:text-font-subtle-dark">
+                    Yangi buyurtmalar
+                </span>
+                <div class="text-3xl font-bold font-mono tracking-tight text-primary-600 dark:text-primary-400 mt-2">
+                    {{ stats.new_orders }}
+                </div>
+                <div class="text-xs text-font-subtle dark:text-font-subtle-dark mt-2">
+                    Ko'rib chiqilishi kutilayotgan
+                </div>
+            {% endcomponent %}
+
+            <!-- Bugungi buyurtmalar -->
+            {% component "unfold/components/card.html" with href="/admin/orders/order/" icon="today" %}
+                <span class="text-xs uppercase font-semibold tracking-wider text-font-subtle dark:text-font-subtle-dark">
+                    Bugungi buyurtmalar
+                </span>
+                <div class="text-3xl font-bold font-mono tracking-tight text-font-important dark:text-font-important-dark mt-2">
+                    {{ stats.today_orders }}
+                </div>
+                <div class="text-xs text-font-subtle dark:text-font-subtle-dark mt-2">
+                    Jami buyurtmalar: {{ stats.total_orders }}
+                </div>
+            {% endcomponent %}
+
+            <!-- Jami tushum -->
+            {% component "unfold/components/card.html" with href="/admin/orders/order/" icon="payments" %}
+                <span class="text-xs uppercase font-semibold tracking-wider text-font-subtle dark:text-font-subtle-dark">
+                    Muvaffaqiyatli tushum
+                </span>
+                <div class="text-2xl font-bold font-mono tracking-tight text-emerald-600 dark:text-emerald-400 mt-2">
+                    {{ stats.completed_revenue|floatformat:0 }} so'm
+                </div>
+                <div class="text-xs text-font-subtle dark:text-font-subtle-dark mt-2">
+                    Tasdiqlangan & yetkazilgan
+                </div>
+            {% endcomponent %}
+
+            <!-- Ombordagi tovarlar -->
+            {% component "unfold/components/card.html" with href="/admin/products/product/" icon="inventory_2" %}
+                <span class="text-xs uppercase font-semibold tracking-wider text-font-subtle dark:text-font-subtle-dark">
+                    Faol tovarlar
+                </span>
+                <div class="text-3xl font-bold font-mono tracking-tight text-font-important dark:text-font-important-dark mt-2">
+                    {{ stats.active_products }}
+                </div>
+                <div class="text-xs mt-2">
+                    {% if stats.out_of_stock_variants > 0 %}
+                        <span class="text-red-500 font-semibold">{{ stats.out_of_stock_variants }} ta variantda qoldiq 0</span>
+                    {% else %}
+                        <span class="text-emerald-500 font-medium">Barcha variantlarda qoldiq bor</span>
+                    {% endif %}
+                </div>
+            {% endcomponent %}
+        </div>
+
+        {% if recent_orders %}
+        <!-- Oxirgi buyurtmalar jadvali -->
+        {% component "unfold/components/card.html" %}
+            <div class="flex items-center justify-between pb-3 border-b border-base-200 dark:border-base-800 mb-4">
+                <h3 class="font-bold text-base text-font-important dark:text-font-important-dark flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-600">shopping_bag</span>
+                    Oxirgi buyurtmalar
+                </h3>
+                <a href="/admin/orders/order/" class="text-xs font-semibold text-primary-600 hover:underline">
+                    Barchasini ko'rish &rarr;
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-base-200 dark:border-base-800 text-xs uppercase text-font-subtle">
+                            <th class="py-2.5 px-3">№</th>
+                            <th class="py-2.5 px-3">Sana</th>
+                            <th class="py-2.5 px-3">Mijoz</th>
+                            <th class="py-2.5 px-3">Telefon</th>
+                            <th class="py-2.5 px-3">Yetkazish</th>
+                            <th class="py-2.5 px-3">Jami</th>
+                            <th class="py-2.5 px-3">Holat</th>
+                            <th class="py-2.5 px-3 text-right">Amal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-100 dark:divide-base-800">
+                        {% for order in recent_orders %}
+                        <tr class="hover:bg-base-50 dark:hover:bg-base-800/50 transition">
+                            <td class="py-2.5 px-3 font-mono font-semibold">#{{ order.id }}</td>
+                            <td class="py-2.5 px-3 text-font-subtle">{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                            <td class="py-2.5 px-3 font-medium">{{ order.name }}</td>
+                            <td class="py-2.5 px-3"><a href="tel:{{ order.phone }}" class="text-primary-600 hover:underline">{{ order.phone }}</a></td>
+                            <td class="py-2.5 px-3 text-xs">{{ order.get_delivery_display }}</td>
+                            <td class="py-2.5 px-3 font-mono font-semibold">{{ order.total|floatformat:0 }} so'm</td>
+                            <td class="py-2.5 px-3">
+                                {% if order.status == "new" %}
+                                    <span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">{{ order.get_status_display }}</span>
+                                {% elif order.status == "done" %}
+                                    <span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">{{ order.get_status_display }}</span>
+                                {% elif order.status == "cancelled" %}
+                                    <span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300">{{ order.get_status_display }}</span>
+                                {% else %}
+                                    <span class="inline-block px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">{{ order.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-2.5 px-3 text-right">
+                                <a href="{% url 'admin:orders_order_change' order.id %}" class="inline-flex items-center text-xs font-semibold text-primary-600 hover:underline">
+                                    Ochish &rarr;
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endcomponent %}
+        {% endif %}
+    </div>
+
+    <!-- Standart ilovalar ro'yxati va oxirgi harakatlar tarixi -->
+    <div class="flex flex-col lg:flex-row lg:gap-8">
+        <div class="grow">
+            {% include "unfold/helpers/app_list_default.html" %}
+        </div>
+
+        {% include "unfold/helpers/history.html" %}
+    </div>
+{% endblock %}

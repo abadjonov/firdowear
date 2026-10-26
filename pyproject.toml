@@ -9,7 +9,7 @@ dependencies = [
     "dj-database-url==2.3.0",
     "django==5.1.15",
     "django-modeltranslation==0.20.6",
-    "django-unfold>=0.91.0",
+    "django-unfold==0.91.0",
     "gunicorn==23.0.0",
     "pillow==12.3.0",
     "polib==1.2.0",

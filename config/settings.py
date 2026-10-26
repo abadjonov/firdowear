@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 import dj_database_url
 from decouple import Csv, config
 from django.core.exceptions import ImproperlyConfigured
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,6 +16,8 @@ CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 
 INSTALLED_APPS = [
     "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
     "modeltranslation",  # admin'dan oldin turishi shart
     "django.contrib.admin",
     "django.contrib.auth",
@@ -173,4 +176,95 @@ LOGGING = {
     "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler"}},
     "root": {"handlers": ["console"], "level": config("LOG_LEVEL", default="INFO")},
+}
+
+# --- Django Unfold sozlamalari ---
+UNFOLD = {
+    "SITE_TITLE": "Firdo Admin",
+    "SITE_HEADER": "Firdo Wear",
+    "SITE_SUBHEADER": "Internet Do'kon Boshqaruvi",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "checkroom",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "DASHBOARD_CALLBACK": "orders.dashboard.dashboard_callback",
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": _("Boshqaruv"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Dashboard"),
+                        "icon": "dashboard",
+                        "link": reverse_lazy("admin:index"),
+                    },
+                    {
+                        "title": _("Buyurtmalar"),
+                        "icon": "shopping_cart",
+                        "link": reverse_lazy("admin:orders_order_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Katalog"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Mahsulotlar"),
+                        "icon": "apparel",
+                        "link": reverse_lazy("admin:products_product_changelist"),
+                    },
+                    {
+                        "title": _("Kategoriyalar"),
+                        "icon": "category",
+                        "link": reverse_lazy("admin:products_category_changelist"),
+                    },
+                    {
+                        "title": _("Brendlar"),
+                        "icon": "sell",
+                        "link": reverse_lazy("admin:products_brand_changelist"),
+                    },
+                    {
+                        "title": _("Ranglar"),
+                        "icon": "palette",
+                        "link": reverse_lazy("admin:products_color_changelist"),
+                    },
+                    {
+                        "title": _("O'lcham turlari"),
+                        "icon": "straighten",
+                        "link": reverse_lazy("admin:products_sizetype_changelist"),
+                    },
+                    {
+                        "title": _("O'lchamlar"),
+                        "icon": "format_list_numbered",
+                        "link": reverse_lazy("admin:products_size_changelist"),
+                    },
+                    {
+                        "title": _("Yosh guruhlari"),
+                        "icon": "child_care",
+                        "link": reverse_lazy("admin:products_agegroup_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _("Foydalanuvchilar"),
+                "separator": True,
+                "items": [
+                    {
+                        "title": _("Foydalanuvchilar"),
+                        "icon": "people",
+                        "link": reverse_lazy("admin:auth_user_changelist"),
+                    },
+                    {
+                        "title": _("Guruhlar"),
+                        "icon": "groups",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
 }
